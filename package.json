@@ -1,0 +1,86 @@
+{
+  "name": "react-imageslides",
+  "version": "0.0.1",
+  "description": "React form validtion made easy",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "clean": "rimraf dist",
+    "dev": "npm run clean && NODE_ENV=development node ./demo/mobile/start.js",
+    "build": "npm run clean && NODE_ENV=production webpack",
+    "lint": "eslint --fix ./src --ext .js,.jsx",
+    "eslint-check": "eslint --print-config .eslintrc | eslint-config-prettier-check",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "react",
+    "form",
+    "validation"
+  ],
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/tests/__mocks__/styleMock.js"
+    },
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ]
+  },
+  "author": "loadingwyn",
+  "devDependencies": {
+    "@storybook/addon-viewport": "^3.3.3",
+    "@storybook/react": "^3.2.12",
+    "autoprefixer": "^7.1.4",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.1",
+    "babel-jest": "^21.2.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.7",
+    "enzyme": "^3.1.0",
+    "enzyme-adapter-react-16": "^1.0.1",
+    "enzyme-to-json": "^3.1.1",
+    "eslint": "^4.8.0",
+    "eslint-config-airbnb": "^16.0.0",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-prettier": "^2.3.1",
+    "eslint-plugin-react": "^7.4.0",
+    "jest": "^21.2.1",
+    "postcss-loader": "^2.0.6",
+    "precss": "^2.0.0",
+    "prettier": "^1.7.4",
+    "prop-types": "^15.6.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-imageslides": "^0.8.6",
+    "react-test-renderer": "^16.0.0",
+    "rimraf": "^2.6.2",
+    "style-loader": "^0.19.0",
+    "stylelint": "^8.1.1",
+    "stylelint-order": "^0.7.0",
+    "superstatic": "^5.0.1",
+    "webpack": "^3.6.0"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.6.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "dependencies": {
+    "validator-runner": "^0.0.2"
+  }
+}
