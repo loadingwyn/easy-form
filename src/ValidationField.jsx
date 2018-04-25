@@ -40,6 +40,8 @@ class ValidationField extends Component {
       id,
       validateTrigger,
       values,
+      errors,
+      loading,
       name,
       valuePropName,
       defaultValue,
@@ -49,7 +51,12 @@ class ValidationField extends Component {
       [valuePropName]: values[name] || defaultValue,
       [validateTrigger]: this.handleValueChange,
     });
-    return <div>{input}</div>;
+    return (
+      <div>
+        {input}
+        <span>{errors[name]}</span>
+      </div>
+    );
   }
 }
 export default withForm(ValidationField);
