@@ -6,6 +6,7 @@ class ValidationField extends Component {
     disabled: false,
     valuePropName: 'value',
     validateTrigger: 'onChange',
+    defaultValue: '',
   };
 
   handleValueChange = (e, value) => {
@@ -36,18 +37,14 @@ class ValidationField extends Component {
 
   render() {
     const {
-      values,
-      errors,
-      validating,
-      name,
-      render,
-      ...other
+      defaultValue,
+      values, errors, validating, name, render, ...other
     } = this.props;
     return render({
       ...other,
       name,
       onValueChange: this.handleValueChange,
-      value: values[name],
+      value: values[name] || defaultValue,
       error: errors[name],
       validating: validating[name],
     });

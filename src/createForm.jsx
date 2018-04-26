@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import Validator from 'validator-runner';
 import FormContext from './FormContext';
-import fieldRender from './fieldRender';
+import render from './fieldRender';
 // import PropTypes from 'prop-types';
 
-export default (defaultValues, rules, option) => ComposedComponent =>
+export default (
+  defaultValues,
+  rules,
+  option,
+  fieldRender = render,
+) => ComposedComponent =>
   class extends Component {
     static propTypes = {};
 
@@ -60,12 +65,10 @@ export default (defaultValues, rules, option) => ComposedComponent =>
           [name]: true,
         },
       }));
-      console.log(value);
       const validation = this.validator.validateItem(
         { [name]: value },
         name,
         errors => {
-          console.log(errors, 11);
           this.setState(state => ({
             errors: {
               ...state.errors,
