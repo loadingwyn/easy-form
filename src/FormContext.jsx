@@ -2,7 +2,7 @@ import React from 'react';
 
 const FormContext = React.createContext({});
 export default FormContext;
-export function withForm(Component) {
+export function withFormData(Component) {
   return function WrappedComponent(props) {
     return (
       <FormContext.Consumer>

@@ -1,12 +1,11 @@
-import React, { Component, cloneElement } from 'react';
-import { withForm } from './FormContext';
+import { Component } from 'react';
+import { withFormData } from './FormContext';
 
 class ValidationField extends Component {
   static defaultProps = {
     disabled: false,
     valuePropName: 'value',
     validateTrigger: 'onChange',
-    defaultValue: '',
   };
 
   handleValueChange = (e, value) => {
@@ -34,29 +33,24 @@ class ValidationField extends Component {
       this.props[validateTrigger](e, value);
     }
   };
+
   render() {
     const {
-      children,
-      id,
-      validateTrigger,
       values,
       errors,
-      loading,
+      validating,
       name,
-      valuePropName,
-      defaultValue,
+      render,
+      ...other
     } = this.props;
-    const input = cloneElement(children, {
-      id: children.props.id || id,
-      [valuePropName]: values[name] || defaultValue,
-      [validateTrigger]: this.handleValueChange,
+    return render({
+      ...other,
+      name,
+      onValueChange: this.handleValueChange,
+      value: values[name],
+      error: errors[name],
+      validating: validating[name],
     });
-    return (
-      <div>
-        {input}
-        <span>{errors[name]}</span>
-      </div>
-    );
   }
 }
-export default withForm(ValidationField);
+export default withFormData(ValidationField);

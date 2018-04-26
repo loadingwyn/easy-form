@@ -4,7 +4,15 @@ import { ValidationField, createForm } from '../src';
 
 const rules = {
   name: {
-    validator: name => name,
+    validator: name => new Promise((res, rej) => {
+      setTimeout(() => {
+        if (name) {
+          res(name);
+        } else {
+          rej(name);
+        }
+      }, 200);
+    }),
     message: '用户名不能为空',
   },
   password: {
