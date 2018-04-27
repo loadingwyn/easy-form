@@ -5,18 +5,14 @@ import './style.css';
 export default function fieldRender({
   children,
   id,
-  value,
   error,
   validating,
   label,
-  onValueChange,
-  valuePropName,
-  validateTrigger,
+  dataBindProps,
 }) {
   const input = cloneElement(children, {
     id,
-    [valuePropName]: value,
-    [validateTrigger]: onValueChange,
+    ...dataBindProps,
   });
   return (
     <div>

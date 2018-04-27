@@ -4,12 +4,7 @@ import FormContext from './FormContext';
 import render from './fieldRender';
 // import PropTypes from 'prop-types';
 
-export default (
-  defaultValues,
-  rules,
-  option,
-  fieldRender = render,
-) => ComposedComponent =>
+export default (defaultValues, rules, options = {}) => ComposedComponent =>
   class extends Component {
     static propTypes = {};
 
@@ -20,6 +15,7 @@ export default (
       super(props, context);
       const data = props.defaultValues ? props.defaultValues : defaultValues;
       this.originalData = data || {};
+      const { retention, traversal, concurrent } = options;
       this.state = {
         values: {
           ...data,
@@ -28,11 +24,25 @@ export default (
         validating: {},
         submitting: false,
       };
-      this.validator = new Validator(props.rules ? props.rules : rules, option);
+      this.validator = new Validator(props.rules ? props.rules : rules, {
+        retention,
+        traversal,
+        concurrent,
+      });
       this.lastValidation = {};
     }
 
+    static getDerivedStateFromProps(nextProps) {
+      if (nextProps.values) {
+        return {
+          values: nextProps.values,
+        };
+      }
+      return null;
+    }
+
     handleChange = (name, value, cb) => {
+      const { onChange } = this.props;
       this.setState(state => {
         this.initialized = false;
         return {
@@ -42,6 +52,7 @@ export default (
           },
         };
       }, () => cb && cb(name));
+      if (onChange) onChange(name, value);
     };
 
     initialize = () => {
@@ -136,7 +147,7 @@ export default (
             ...this.state,
             handleChange: this.handleChange,
             validateItem: this.validateItem,
-            render: fieldRender,
+            render: options.fieldRender || render,
           }}>
           <ComposedComponent
             {...this.state}
