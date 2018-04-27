@@ -6,7 +6,7 @@ import Button from 'material-ui/Button';
 import { InputAdornment } from 'material-ui/Input';
 import { ValidationField, createForm } from '../src';
 import LoadingIcon from '../src/icons/Loading';
-import ReduxForm, { store } from './redux';
+import ReduxForm, { store } from './ReduxForm';
 
 const rules = {
   name: {
@@ -28,14 +28,14 @@ const rules = {
   },
 };
 
-class LoginForm extends React.PureComponent {
+class MaterialUIForm extends React.PureComponent {
   handleSubmit = e => {
     e.preventDefault();
     const { submit } = this.props;
     submit(data => console.log(data), error => console.log(error))();
   };
   render() {
-    const { isValid } = this.props;
+    const { isValid, submitting } = this.props;
     return (
       <form onSubmit={this.handleSubmit}>
         <ValidationField name="name" label="用户名" validateTrigger="onBlur">
@@ -52,7 +52,7 @@ class LoginForm extends React.PureComponent {
             flex: '0 0 auto',
             marginRight: '20px',
           }}
-          disabled={!isValid}>
+          disabled={!isValid || submitting}>
           登陆
         </Button>
       </form>
@@ -90,8 +90,8 @@ function fieldRender({
   });
   return <div style={{ margin: '10px' }}>{input}</div>;
 }
-const Demo = createForm({}, rules, { fieldRender })(LoginForm);
+const Demo = createForm({}, rules, { fieldRender })(MaterialUIForm);
 storiesOf('Form 扩展', module)
-  .add('material-ui@1.x', () => <Demo />)
+  .add('with material-ui@1.x', () => <Demo />)
   .addDecorator(story => <Provider store={store}>{story()}</Provider>)
-  .add('redux', () => <ReduxForm />);
+  .add('with redux', () => <ReduxForm />);

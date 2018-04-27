@@ -4,7 +4,11 @@ import FormContext from './FormContext';
 import render from './fieldRender';
 // import PropTypes from 'prop-types';
 
-export default (defaultValues, rules, options = {}) => ComposedComponent =>
+export default (
+  defaultValues = {},
+  defaultRules = {},
+  options = {},
+) => ComposedComponent =>
   class extends Component {
     static propTypes = {};
 
@@ -13,30 +17,48 @@ export default (defaultValues, rules, options = {}) => ComposedComponent =>
     initialized = true;
     constructor(props, context) {
       super(props, context);
-      const data = props.defaultValues ? props.defaultValues : defaultValues;
-      this.originalData = data || {};
+      const { values = defaultValues, rules = defaultRules } = props;
       const { retention, traversal, concurrent } = options;
+      this.originalData = values;
       this.state = {
-        values: {
-          ...data,
-        },
+        values: this.originalData,
         errors: {},
         validating: {},
         submitting: false,
+        validator: new Validator(rules, {
+          retention,
+          traversal,
+          concurrent,
+        }),
       };
-      this.validator = new Validator(props.rules ? props.rules : rules, {
-        retention,
-        traversal,
-        concurrent,
-      });
       this.lastValidation = {};
     }
 
-    static getDerivedStateFromProps(nextProps) {
-      if (nextProps.values) {
-        return {
-          values: nextProps.values,
-        };
+    static getDerivedStateFromProps(nextProps, prevState) {
+      const { rules, values } = nextProps;
+      const nextState = {};
+      const { retention, traversal, concurrent } = options;
+      let flag = 0;
+      if (nextProps.values !== prevState.lastValues) {
+        flag = 1;
+        Object.assign(nextState, {
+          values,
+          lastValues: nextProps.values,
+        });
+      }
+      if (nextProps.rules !== prevState.lastRules) {
+        flag = 1;
+        Object.assign(nextState, {
+          validator: new Validator(rules, {
+            retention,
+            traversal,
+            concurrent,
+          }),
+          lastRules: nextProps.rules,
+        });
+      }
+      if (flag) {
+        return nextState;
       }
       return null;
     }
@@ -55,13 +77,14 @@ export default (defaultValues, rules, options = {}) => ComposedComponent =>
       if (onChange) onChange(name, value);
     };
 
-    initialize = () => {
-      this.validator.cancelAll();
+    initialize = (newData = {}) => {
+      this.state.validator.cancelAll();
       this.setState(() => {
         this.initialized = true;
         return {
           values: {
             ...this.originalData,
+            ...newData,
           },
           errors: {},
           validating: {},
@@ -76,7 +99,7 @@ export default (defaultValues, rules, options = {}) => ComposedComponent =>
           [name]: true,
         },
       }));
-      const validation = this.validator.validateItem(
+      const validation = this.state.validator.validateItem(
         { [name]: value },
         name,
         errors => {
@@ -97,7 +120,20 @@ export default (defaultValues, rules, options = {}) => ComposedComponent =>
 
     validateAll = () => {
       const { values } = this.state;
-      return this.validator.validate(
+      const { rules = defaultRules } = this.props;
+      this.setState(state => {
+        const newState = {};
+        Object.keys(rules).forEach(key => {
+          newState[key] = true;
+        });
+        return {
+          validating: {
+            ...state.validating,
+            ...newState,
+          },
+        };
+      });
+      return this.state.validator.validate(
         values,
         errors => {
           this.setState(state => ({
