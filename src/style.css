@@ -1,12 +1,56 @@
 .easy-form-loading {
   width: 14px;
   height: 14px;
+  padding: 4px;
   animation-duration: 0.6s;
   animation-timing-function: cubic-bezier(0.42, 0.61, 0.58, 0.41);
   animation-iteration-count: infinite;
   animation-name: rotate;
 }
 
+.easy-form-field {
+  display: flex;
+  margin: 10px;
+  font-size: 14px;
+}
+
+.easy-form-label {
+  min-width: 160px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+.easy-form-label::after {
+  content: ':';
+}
+
+.easy-form-main {
+  display: flex;
+  flex: 1;
+  flex-flow: column nowrap;
+  max-width: 320px;
+}
+
+.easy-form-input {
+  display: flex;
+  position: relative;
+  align-items: center;
+  margin-right: 32px;
+}
+
+.easy-form-input > *:first-child {
+  flex: 1;
+}
+
+.easy-form-state-icon {
+  position: absolute;
+  left: 100%;
+}
+
+.easy-form-helper-text {
+  color: #f00;
+  font-size: 12px;
+}
 @keyframes rotate {
   0% {
     transform: rotate(0);

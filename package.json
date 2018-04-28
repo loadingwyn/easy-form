@@ -67,7 +67,6 @@
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-imageslides": "^0.8.6",
     "react-redux": "^5.0.7",
     "react-test-renderer": "^16.0.0",
     "redux": "^4.0.0",

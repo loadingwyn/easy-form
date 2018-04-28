@@ -88,6 +88,7 @@ class ValidationField extends Component {
     };
     return render({
       ...other,
+      id: `easy-form-${name}`,
       name,
       dataBindProps,
       onValidate: this.handleValidate,

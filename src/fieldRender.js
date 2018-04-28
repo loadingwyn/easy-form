@@ -15,13 +15,19 @@ export default function fieldRender({
     ...dataBindProps,
   });
   return (
-    <div>
-      <label htmlFor={id}>{label}</label>
-      <span>
-        {input}
-        {validating ? <LoadingIcon className="easy-form-loading" /> : null}
-      </span>
-      <span>{error}</span>
+    <div className="easy-form-field">
+      <label htmlFor={id} className="easy-form-label">
+        {label}
+      </label>
+      <div className="easy-form-main">
+        <div className="easy-form-input">
+          {input}
+          {validating ? (
+            <LoadingIcon className="easy-form-loading easy-form-state-icon" />
+          ) : null}
+        </div>
+        <span className="easy-form-helper-text">{error}</span>
+      </div>
     </div>
   );
 }

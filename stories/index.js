@@ -40,12 +40,12 @@ class LoginForm extends React.PureComponent {
         </ValidationField>
         <button
           style={{
-            flex: '0 0 auto',
-            marginRight: '20px',
+            display: 'inline-block',
+            marginLeft: 180,
           }}
           disabled={!isValid}
           type="submit">
-          Login
+            Login
         </button>
       </form>
     );
