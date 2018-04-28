@@ -37,7 +37,8 @@ class ValidationField extends Component {
       onValidate,
     } = this.props;
     handleChange(name, newValue);
-    validateItem(name, newValue).then(onValidate, onValidate);
+    const result = validateItem(name, newValue);
+    if (result) result.then(onValidate, onValidate);
     if (this.props[validateTrigger]) {
       this.props[validateTrigger](e, value, ...args);
     }
@@ -61,7 +62,8 @@ class ValidationField extends Component {
     }
     const newValue = this.getNewValue(e, value);
     const { name, validateItem, onValidate } = this.props;
-    validateItem(name, newValue).then(onValidate, onValidate);
+    const result = validateItem(name, newValue);
+    if (result) result.then(onValidate, onValidate);
   };
 
   render() {

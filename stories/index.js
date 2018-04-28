@@ -4,15 +4,16 @@ import { ValidationField, createForm } from '../src';
 
 const rules = {
   name: {
-    validator: name => new Promise((res, rej) => {
-      setTimeout(() => {
-        if (name) {
-          res(name);
-        } else {
-          rej(name);
-        }
-      }, 200);
-    }),
+    validator: name =>
+      new Promise((res, rej) => {
+        setTimeout(() => {
+          if (name) {
+            res(name);
+          } else {
+            rej(name);
+          }
+        }, 200);
+      }),
     message: '用户名不能为空',
   },
   password: {
@@ -22,14 +23,19 @@ const rules = {
 };
 
 class LoginForm extends React.PureComponent {
+  handleSubmit = e => {
+    e.preventDefault();
+    const { submit } = this.props;
+    submit(data => console.log(data), error => console.log(error))();
+  };
   render() {
-    const { submit, isValid } = this.props;
+    const { isValid } = this.props;
     return (
-      <React.Fragment>
-        <ValidationField name="name">
+      <form onSubmit={this.handleSubmit}>
+        <ValidationField name="name" label="Username">
           <input placeholder="Username" />
         </ValidationField>
-        <ValidationField name="password">
+        <ValidationField name="password" label="Password">
           <input placeholder="Password" />
         </ValidationField>
         <button
@@ -38,14 +44,10 @@ class LoginForm extends React.PureComponent {
             marginRight: '20px',
           }}
           disabled={!isValid}
-          type="primary"
-          onClick={submit(
-            data => console.log(data),
-            error => console.log(error),
-          )}>
-          登陆
+          type="submit">
+          Login
         </button>
-      </React.Fragment>
+      </form>
     );
   }
 }
