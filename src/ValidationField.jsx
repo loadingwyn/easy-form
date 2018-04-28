@@ -6,8 +6,28 @@ class ValidationField extends Component {
     disabled: false,
     valuePropName: 'value',
     validateTrigger: 'onChange',
+    trigger: 'onChange',
     defaultValue: '',
   };
+
+  // shouldComponentUpdate(nextProps) {
+  //   const {
+  //     values: nextValues,
+  //     errors: nextErrors,
+  //     validatings: nextValidatings,
+  //     name,
+  //   } = nextProps;
+  //   const { values, errors, validatings } = this.props;
+  //   // console.log(nextValues[name], values[name], name);
+  //   if (
+  //     nextValues[name] !== values[name] ||
+  //     nextErrors[name] !== errors[name] ||
+  //     nextValidatings[name] !== validatings[name]
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   getNewValue(e, value) {
     let newValue;
@@ -24,7 +44,7 @@ class ValidationField extends Component {
     return newValue;
   }
 
-  handleValueChange = (e, value, ...args) => {
+  handleChangeAndValidate = (e, value, ...args) => {
     if (!e) {
       return;
     }
@@ -44,7 +64,7 @@ class ValidationField extends Component {
     }
   };
 
-  handleChange = (e, value, ...args) => {
+  handleValueChange = (e, value, ...args) => {
     if (!e) {
       return;
     }
@@ -71,19 +91,20 @@ class ValidationField extends Component {
       defaultValue,
       values,
       errors,
-      validating,
+      validatings,
       name,
       render,
       validateTrigger,
       valuePropName,
+      trigger,
       ...other
     } = this.props;
     const dataBindProps = {
       [valuePropName]: values[name] || defaultValue,
-      onChange: this.handleChange,
+      [trigger]: this.handleValueChange,
       [validateTrigger]:
-        validateTrigger === 'onChange'
-          ? this.handleValueChange
+        validateTrigger === trigger
+          ? this.handleChangeAndValidate
           : this.handleValidate,
     };
     return render({
@@ -91,11 +112,12 @@ class ValidationField extends Component {
       id: `easy-form-${name}`,
       name,
       dataBindProps,
+      trigger,
       onValidate: this.handleValidate,
-      onChange: this.handleChange,
       onValueChange: this.handleValueChange,
+      onValueChangeAndValidate: this.handleChangeAndValidate,
       error: errors[name],
-      validating: validating[name],
+      validating: validatings[name],
     });
   }
 }

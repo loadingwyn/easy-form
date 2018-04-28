@@ -14,6 +14,7 @@ export default function fieldRender({
     id,
     ...dataBindProps,
   });
+  /* eslint-disable */
   return (
     <div className="easy-form-field">
       <label htmlFor={id} className="easy-form-label">
@@ -30,4 +31,5 @@ export default function fieldRender({
       </div>
     </div>
   );
+  /* eslint-enable */
 }

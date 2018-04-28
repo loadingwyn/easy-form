@@ -23,7 +23,7 @@ export default (
       this.state = {
         values: this.originalData,
         errors: {},
-        validating: {},
+        validatings: {},
         submitting: false,
         validator: new Validator(rules, {
           retention,
@@ -87,15 +87,15 @@ export default (
             ...newData,
           },
           errors: {},
-          validating: {},
+          validatings: {},
         };
       });
     };
 
     validateItem = (name, value) => {
       this.setState(state => ({
-        validating: {
-          ...state.validating,
+        validatings: {
+          ...state.validatings,
           [name]: true,
         },
       }));
@@ -108,8 +108,8 @@ export default (
               ...state.errors,
               [name]: errors,
             },
-            validating: {
-              ...state.validating,
+            validatings: {
+              ...state.validatings,
               [name]: false,
             },
           }));
@@ -127,8 +127,8 @@ export default (
           newState[key] = true;
         });
         return {
-          validating: {
-            ...state.validating,
+          validatings: {
+            ...state.validatings,
             ...newState,
           },
         };
@@ -146,8 +146,8 @@ export default (
         {
           fieldCallback: name => {
             this.setState(state => ({
-              validating: {
-                ...state.validating,
+              validatings: {
+                ...state.validatings,
                 [name]: false,
               },
             }));
@@ -188,8 +188,8 @@ export default (
           <ComposedComponent
             {...this.state}
             {...this.props}
-            isValidating={
-              Object.values(this.state.validating).filter(msg => msg).length > 0
+            isvalidating={
+              Object.values(this.state.validatings).filter(msg => msg).length > 0
             }
             isValid={
               Object.values(this.state.errors).filter(msg => msg && msg.length > 0).length <= 0

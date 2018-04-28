@@ -24,8 +24,12 @@ const actionCreator = payload => ({
 const rootReducer = combineReducers({
   formData: formReducer,
 });
-export const store = createStore(rootReducer);
-
+/* eslint-disable no-underscore-dangle */
+export const store = createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
+/* eslint-enable */
 const rules = {
   name: {
     validator: name =>
@@ -66,6 +70,8 @@ class ReduxForm extends React.PureComponent {
         <ValidationField
           name="name"
           label="用户名"
+          trigger="onBlur"
+          valuePropName="defaultValue"
           validateTrigger="onBlur"
           handleChange={this.handleChange}>
           <TextField placeholder="Username" />
@@ -73,6 +79,8 @@ class ReduxForm extends React.PureComponent {
         <ValidationField
           name="password"
           label="密码"
+          trigger="onBlur"
+          valuePropName="defaultValue"
           validateTrigger="onBlur"
           handleChange={this.handleChange}>
           <TextField placeholder="Password" type="password" />
