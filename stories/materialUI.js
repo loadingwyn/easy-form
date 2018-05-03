@@ -1,12 +1,10 @@
 import React, { cloneElement } from 'react';
 import { storiesOf } from '@storybook/react';
 import TextField from 'material-ui/TextField';
-import { Provider } from 'react-redux';
 import Button from 'material-ui/Button';
 import { InputAdornment } from 'material-ui/Input';
 import { ValidationField, createForm } from '../src';
 import LoadingIcon from '../src/icons/Loading';
-import ReduxForm, { store } from './ReduxForm';
 
 const rules = {
   name: {
@@ -92,6 +90,5 @@ function fieldRender({
 }
 const Demo = createForm({}, rules, { fieldRender })(MaterialUIForm);
 storiesOf('Form 扩展', module)
-  .add('with material-ui@1.x', () => <Demo />)
-  .addDecorator(story => <Provider store={store}>{story()}</Provider>)
-  .add('with redux', () => <ReduxForm />);
+  .add('with material-ui@1.x', () => <Demo />);
+

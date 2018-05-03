@@ -1,5 +1,6 @@
 import React, { cloneElement } from 'react';
-import { connect } from 'react-redux';
+import { connect, Provider } from 'react-redux';
+import { storiesOf } from '@storybook/react';
 import { bindActionCreators, combineReducers, createStore } from 'redux';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
@@ -25,7 +26,7 @@ const rootReducer = combineReducers({
   formData: formReducer,
 });
 /* eslint-disable no-underscore-dangle */
-export const store = createStore(
+const store = createStore(
   rootReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
@@ -132,7 +133,7 @@ function fieldRender({
   return <div style={{ margin: '10px' }}>{input}</div>;
 }
 
-export default connect(
+const Demo = connect(
   state => ({
     values: state.formData,
   }),
@@ -144,3 +145,7 @@ export default connect(
       dispatch,
     ),
 )(createForm({}, rules, { fieldRender })(ReduxForm));
+
+storiesOf('Form 扩展', module)
+  .addDecorator(story => <Provider store={store}>{story()}</Provider>)
+  .add('with redux', () => <Demo />);

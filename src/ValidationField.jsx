@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { withFormData } from './FormContext';
 
-class ValidationField extends Component {
+export class Field extends Component {
   static defaultProps = {
     disabled: false,
     valuePropName: 'value',
@@ -9,25 +9,6 @@ class ValidationField extends Component {
     trigger: 'onChange',
     defaultValue: '',
   };
-
-  // shouldComponentUpdate(nextProps) {
-  //   const {
-  //     values: nextValues,
-  //     errors: nextErrors,
-  //     validatings: nextValidatings,
-  //     name,
-  //   } = nextProps;
-  //   const { values, errors, validatings } = this.props;
-  //   // console.log(nextValues[name], values[name], name);
-  //   if (
-  //     nextValues[name] !== values[name] ||
-  //     nextErrors[name] !== errors[name] ||
-  //     nextValidatings[name] !== validatings[name]
-  //   ) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   getNewValue(e, value) {
     let newValue;
@@ -121,4 +102,4 @@ class ValidationField extends Component {
     });
   }
 }
-export default withFormData(ValidationField);
+export default withFormData(Field);

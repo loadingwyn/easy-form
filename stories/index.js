@@ -45,7 +45,7 @@ class LoginForm extends React.PureComponent {
           }}
           disabled={!isValid}
           type="submit">
-            Login
+          Login
         </button>
       </form>
     );
