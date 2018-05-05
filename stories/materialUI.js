@@ -47,11 +47,10 @@ class MaterialUIForm extends React.PureComponent {
           variant="raised"
           color="primary"
           style={{
-            flex: '0 0 auto',
-            marginRight: '20px',
+            marginLeft: '10px',
           }}
           disabled={!isValid || submitting}>
-          登陆
+          登录
         </Button>
       </form>
     );

@@ -88,12 +88,21 @@ export class Field extends Component {
           ? this.handleChangeAndValidate
           : this.handleValidate,
     };
+    let status;
+    if (validatings[name]) {
+      status = 'validating';
+    } else if (errors[name] && errors[name].length > 0) {
+      status = 'error';
+    } else if (errors[name] && errors[name].length === 0) {
+      status = 'success';
+    }
     return render({
       ...other,
       id: `easy-form-${name}`,
       name,
       dataBindProps,
       trigger,
+      status,
       onValidate: this.handleValidate,
       onValueChange: this.handleValueChange,
       onValueChangeAndValidate: this.handleChangeAndValidate,
