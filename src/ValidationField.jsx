@@ -32,12 +32,12 @@ export class Field extends Component {
     const newValue = this.getNewValue(e, value);
     const {
       name,
-      handleChange,
+      changeHandler,
       validateItem,
       validateTrigger,
       onValidate,
     } = this.props;
-    handleChange(name, newValue);
+    changeHandler(name, newValue);
     const result = validateItem(name, newValue);
     if (result) result.then(onValidate, onValidate);
     if (this.props[validateTrigger]) {
@@ -50,8 +50,8 @@ export class Field extends Component {
       return;
     }
     const newValue = this.getNewValue(e, value);
-    const { name, handleChange, validateTrigger } = this.props;
-    handleChange(name, newValue);
+    const { name, changeHandler, validateTrigger } = this.props;
+    changeHandler(name, newValue);
     if (this.props[validateTrigger]) {
       this.props[validateTrigger](e, value, ...args);
     }

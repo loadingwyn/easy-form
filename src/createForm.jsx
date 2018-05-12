@@ -181,7 +181,7 @@ export default (
         <FormContext.Provider
           value={{
             ...this.state,
-            handleChange: this.handleChange,
+            changeHandler: this.handleChange,
             validateItem: this.validateItem,
             render: options.fieldRender || render,
           }}>

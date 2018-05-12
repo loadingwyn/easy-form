@@ -35,7 +35,6 @@
   },
   "author": "loadingwyn",
   "devDependencies": {
-    "@storybook/addon-viewport": "^3.3.3",
     "@storybook/react": "^3.2.12",
     "antd": "^3.5.0",
     "autoprefixer": "^8.4.1",

@@ -71,19 +71,17 @@ class ReduxForm extends React.PureComponent {
         <ValidationField
           name="name"
           label="用户名"
-          trigger="onBlur"
-          valuePropName="defaultValue"
+          valuePropName="value"
           validateTrigger="onBlur"
-          handleChange={this.handleChange}>
+          changeHandler={this.handleChange}>
           <TextField placeholder="Username" />
         </ValidationField>
         <ValidationField
           name="password"
           label="密码"
-          trigger="onBlur"
-          valuePropName="defaultValue"
+          valuePropName="value"
           validateTrigger="onBlur"
-          handleChange={this.handleChange}>
+          changeHandler={this.handleChange}>
           <TextField placeholder="Password" type="password" />
         </ValidationField>
         <Button
