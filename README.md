@@ -6,7 +6,7 @@
 ## Example
 
 ![Material-UI](demo/materialui.png)
-![Ant Design](demo/antdesign.png)
+<!-- ![Ant Design](demo/antdesign.png) -->
 
 
 ## Features
