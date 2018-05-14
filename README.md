@@ -5,8 +5,8 @@
 
 ## Example
 
-![Material-UI](demo/materialui.gif)
-![Ant Design](demo/antdesign.gif)
+![Material-UI](demo/materialui.png)
+![Ant Design](demo/antdesign.png)
 
 
 ## Features
