@@ -5,13 +5,20 @@ import render from './fieldRender';
 // import PropTypes from 'prop-types';
 
 export default (
+  /**
+   * The default value of form.
+   */
   defaultValues = {},
+  /**
+   * Validation rules.
+   */
   defaultRules = {},
+  /**
+   * validation options.
+   */
   options = {},
 ) => ComposedComponent =>
   class extends Component {
-    static propTypes = {};
-
     static defaultProps = {};
 
     initialized = true;

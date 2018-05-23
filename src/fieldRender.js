@@ -1,8 +1,9 @@
 import React, { cloneElement } from 'react';
+import PropTypes from 'prop-types';
 import LoadingIcon from './icons/Loading';
 import './style.css';
 
-export default function fieldRender({
+function fieldRender({
   children,
   id,
   error,
@@ -33,3 +34,19 @@ export default function fieldRender({
   );
   /* eslint-enable */
 }
+
+fieldRender.propTypes = {
+  id: PropTypes.string,
+  error: PropTypes.string,
+  label: PropTypes.string,
+  validating: PropTypes.bool,
+};
+
+fieldRender.defaultProps = {
+  id: '',
+  error: '',
+  label: '',
+  validating: false,
+};
+
+export default fieldRender;
