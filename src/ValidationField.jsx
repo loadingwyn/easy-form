@@ -44,7 +44,7 @@ export class Field extends Component {
     defaultValue: '',
   };
 
-  getNewValue(e, value) {
+  getValueFromEvent(e, value) {
     let newValue;
     const { valuePropName } = this.props;
     if (!e.preventDefault) {
@@ -59,20 +59,28 @@ export class Field extends Component {
     return newValue;
   }
 
+  valueHandler(e, oldValue, name) {
+    const {
+      formatter,
+    } = this.props;
+    const value = this.getValueFromEvent(e, oldValue);
+    const formattedValue = formatter ? formatter(value) : value;
+    return typeof formattedValue === 'object' ? formattedValue[name] : { [name]: formattedValue };
+  }
   handleChangeAndValidate = (e, value, ...args) => {
     if (!e) {
       return;
     }
-    const newValue = this.getNewValue(e, value);
     const {
       name,
-      changeHandler,
+      onFieldChange,
       validateItem,
       validateTrigger,
       onValidate,
     } = this.props;
-    changeHandler(name, newValue);
-    const result = validateItem(name, newValue);
+    const formattedValue = this.valueHandler(e, value, name);
+    onFieldChange(formattedValue);
+    const result = validateItem(name, formattedValue[name]);
     if (result) result.then(onValidate, onValidate);
     if (this.props[validateTrigger]) {
       this.props[validateTrigger](e, value, ...args);
@@ -83,9 +91,11 @@ export class Field extends Component {
     if (!e) {
       return;
     }
-    const newValue = this.getNewValue(e, value);
-    const { name, changeHandler, validateTrigger } = this.props;
-    changeHandler(name, newValue);
+    const {
+      name, onFieldChange, validateTrigger,
+    } = this.props;
+    const formattedValue = this.valueHandler(e, value, name);
+    onFieldChange(formattedValue);
     if (this.props[validateTrigger]) {
       this.props[validateTrigger](e, value, ...args);
     }
@@ -95,9 +105,9 @@ export class Field extends Component {
     if (!e) {
       return;
     }
-    const newValue = this.getNewValue(e, value);
     const { name, validateItem, onValidate } = this.props;
-    const result = validateItem(name, newValue);
+    const formattedValue = this.valueHandler(e, value, name);
+    const result = validateItem(name, formattedValue[name]);
     if (result) result.then(onValidate, onValidate);
   };
 
@@ -117,11 +127,12 @@ export class Field extends Component {
     const dataBindProps = {
       [valuePropName]: values[name] || defaultValue,
       [trigger]: this.handleValueChange,
-      [validateTrigger]:
-        validateTrigger === trigger
-          ? this.handleChangeAndValidate
-          : this.handleValidate,
     };
+    if (validateTrigger !== 'ignore') {
+      dataBindProps[validateTrigger] = validateTrigger === trigger
+        ? this.handleChangeAndValidate
+        : this.handleValidate;
+    }
     let status;
     if (validatings[name]) {
       status = 'validating';

@@ -33,7 +33,7 @@ class AntdForm extends React.PureComponent {
     submit(data => console.log(data), error => console.log(error))();
   };
   render() {
-    const { isValid, submitting } = this.props;
+    const { isValid, submitting, initialize } = this.props;
     return (
       <form onSubmit={this.handleSubmit}>
         <ValidationField name="name" label="用户名" validateTrigger="onBlur">
@@ -52,6 +52,14 @@ class AntdForm extends React.PureComponent {
             }}
             disabled={!isValid || submitting}>
             登录
+          </Button>
+          <Button
+            onClick={() => initialize()}
+            color="primary"
+            style={{
+            marginLeft: '10px',
+          }}>
+          恢复
           </Button>
         </FormItem>
       </form>

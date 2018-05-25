@@ -14,7 +14,7 @@ export default (
    */
   defaultRules = {},
   /**
-   * validation options.
+   * Form options.
    */
   options = {},
 ) => ComposedComponent =>
@@ -25,18 +25,14 @@ export default (
     constructor(props, context) {
       super(props, context);
       const { values = defaultValues, rules = defaultRules } = props;
-      const { retention, traversal, concurrent } = options;
+      const { formOptions } = options;
       this.originalData = values;
       this.state = {
         values: this.originalData,
         errors: {},
         validatings: {},
         submitting: false,
-        validator: new Validator(rules, {
-          retention,
-          traversal,
-          concurrent,
-        }),
+        validator: new Validator(rules, formOptions),
       };
       this.lastValidation = {};
     }
@@ -44,61 +40,71 @@ export default (
     static getDerivedStateFromProps(nextProps, prevState) {
       const { rules, values } = nextProps;
       const nextState = {};
-      const { retention, traversal, concurrent } = options;
-      let flag = 0;
+      const { formOptions } = options;
       if (nextProps.values !== prevState.lastValues) {
-        flag = 1;
         Object.assign(nextState, {
           values,
           lastValues: nextProps.values,
         });
       }
       if (nextProps.rules !== prevState.lastRules) {
-        flag = 1;
         Object.assign(nextState, {
-          validator: new Validator(rules, {
-            retention,
-            traversal,
-            concurrent,
-          }),
+          validator: new Validator(rules, formOptions),
           lastRules: nextProps.rules,
         });
       }
-      if (flag) {
-        return nextState;
-      }
-      return null;
+      return nextState;
     }
 
-    handleChange = (name, value, cb) => {
-      const { onChange } = this.props;
+    getFieldValue = (value = {}) => {
+      const {
+        onChange,
+      } = this.props;
+      let allValues;
+      this.initialized = false;
       this.setState(state => {
-        this.initialized = false;
-        return {
-          values: {
-            ...state.values,
-            [name]: value,
-          },
+        allValues = {
+          ...state.values,
+          ...value,
         };
-      }, () => cb && cb(name));
-      if (onChange) onChange(name, value);
-    };
-
-    initialize = (newData = {}) => {
-      this.state.validator.cancelAll();
-      this.setState(() => {
-        this.initialized = true;
-        return {
-          values: {
-            ...this.originalData,
-            ...newData,
-          },
-          errors: {},
-          validatings: {},
-        };
+        return { values: allValues };
       });
+      if (onChange) onChange(value, allValues);
     };
 
+    handleFieldChange = (value = {}) => {
+      const {
+        onFieldsChange,
+      } = options;
+      if (onFieldsChange) {
+        onFieldsChange(this.props, value, this.getFieldValue);
+      } else {
+        this.getFieldValue(value);
+      }
+    };
+
+    initialize = newData => {
+      const {
+        onFieldsReset,
+      } = options;
+      this.state.validator.cancelAll();
+      this.initialized = true;
+      if (onFieldsReset) {
+        onFieldsReset(this.props, newData || this.originalData, this.setFormValues);
+      } else {
+        this.setFormValues(newData || this.originalData);
+      }
+      this.setState(() => ({
+        errors: {},
+        validatings: {},
+      }));
+    };
+
+    setFormValues = newValues => {
+      this.setState({
+        values: newValues,
+      });
+    }
     validateItem = (name, value) => {
       this.setState(state => ({
         validatings: {
@@ -184,17 +190,22 @@ export default (
     };
 
     render() {
+      const {
+        onFieldsChange,
+        onChange,
+        ...other
+      } = this.props;
       return (
         <FormContext.Provider
           value={{
             ...this.state,
-            changeHandler: this.handleChange,
+            onFieldChange: this.handleFieldChange,
             validateItem: this.validateItem,
             render: options.fieldRender || render,
           }}>
           <ComposedComponent
             {...this.state}
-            {...this.props}
+            {...other}
             isvalidating={
               Object.values(this.state.validatings).filter(msg => msg).length > 0
             }

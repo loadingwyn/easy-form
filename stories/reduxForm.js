@@ -12,9 +12,10 @@ const formReducer = (state = {}, action) => {
   if (!action.payload) {
     return state;
   }
-  return Object.assign({}, state, {
-    [action.payload.name]: action.payload.value,
-  });
+  if (action.type === 'RESET_FORM_VALUE') {
+    return action.payload || {};
+  }
+  return Object.assign({}, state, action.payload);
 };
 
 const actionCreator = payload => ({
@@ -22,6 +23,10 @@ const actionCreator = payload => ({
   payload,
 });
 
+const resetActionCreator = payload => ({
+  type: 'RESET_FORM_VALUE',
+  payload,
+});
 const rootReducer = combineReducers({
   formData: formReducer,
 });
@@ -57,31 +62,26 @@ class ReduxForm extends React.PureComponent {
     const { submit } = this.props;
     submit(data => console.log(data), error => console.log(error))();
   };
-  handleChange = (name, value) => {
-    const { update } = this.props;
-    update({
-      name,
-      value,
-    });
-  };
+  // handleChange = value => {
+  //   const { update } = this.props;
+  //   update(value);
+  // };
   render() {
-    const { isValid } = this.props;
+    const { isValid, initialize } = this.props;
     return (
       <form onSubmit={this.handleSubmit}>
         <ValidationField
           name="name"
           label="用户名"
-          valuePropName="value"
-          validateTrigger="onBlur"
-          changeHandler={this.handleChange}>
+          validateTrigger="onBlur">
           <TextField placeholder="Username" />
         </ValidationField>
         <ValidationField
           name="password"
           label="密码"
-          valuePropName="value"
-          validateTrigger="onBlur"
-          changeHandler={this.handleChange}>
+          trigger="onBlur"
+          valuePropName="defaultValue"
+          validateTrigger="onBlur">
           <TextField placeholder="Password" type="password" />
         </ValidationField>
         <Button
@@ -93,6 +93,14 @@ class ReduxForm extends React.PureComponent {
           }}
           disabled={!isValid}>
           登录
+        </Button>
+        <Button
+          onClick={() => initialize()}
+          color="primary"
+          style={{
+            marginLeft: '10px',
+          }}>
+          恢复
         </Button>
       </form>
     );
@@ -138,10 +146,19 @@ const Demo = connect(
     bindActionCreators(
       {
         update: actionCreator,
+        reset: resetActionCreator,
       },
       dispatch,
     ),
-)(createForm({}, rules, { fieldRender })(ReduxForm));
+)(createForm({}, rules, {
+  fieldRender,
+  onFieldsChange: (props, value) => {
+    props.update(value);
+  },
+  onFieldsReset: (props, value) => {
+    props.reset(value);
+  },
+})(ReduxForm));
 
 storiesOf('Form 扩展', module)
   .addDecorator(story => <Provider store={store}>{story()}</Provider>)

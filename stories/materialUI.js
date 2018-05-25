@@ -39,7 +39,7 @@ class MaterialUIForm extends React.PureComponent {
         <ValidationField name="name" label="用户名" validateTrigger="onBlur">
           <TextField placeholder="Username" />
         </ValidationField>
-        <ValidationField name="password" label="密码" validateTrigger="onBlur">
+        <ValidationField name="password" label="密码" validateTrigger="ignore">
           <TextField placeholder="Password" type="password" />
         </ValidationField>
         <Button
