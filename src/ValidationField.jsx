@@ -26,10 +26,16 @@ export class Field extends Component {
     defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
     /**
      * Callback fired after validation.
-     * @param {object} result The result of the validation.
+     * @param {object} result The result of validation.
      * You can pull out the return of the validator by accessing `result.promiseValue`.
      */
     onValidate: PropTypes.func,
+    /**
+     * Handler that format the input.
+     * @param {string | boolean | number} value The value of input.
+     * @returns {object} The formatted value.
+     */
+    formatter: PropTypes.func,
     /**
      * Render Props.
      * @param {object} props Refer to fieldRender.
@@ -59,14 +65,15 @@ export class Field extends Component {
     return newValue;
   }
 
-  valueHandler(e, oldValue, name) {
+  format(e, oldValue, name) {
     const {
       formatter,
     } = this.props;
     const value = this.getValueFromEvent(e, oldValue);
     const formattedValue = formatter ? formatter(value) : value;
-    return typeof formattedValue === 'object' ? formattedValue[name] : { [name]: formattedValue };
+    return typeof formattedValue === 'object' ? formattedValue : { [name]: formattedValue };
   }
+
   handleChangeAndValidate = (e, value, ...args) => {
     if (!e) {
       return;
@@ -78,7 +85,7 @@ export class Field extends Component {
       validateTrigger,
       onValidate,
     } = this.props;
-    const formattedValue = this.valueHandler(e, value, name);
+    const formattedValue = this.format(e, value, name);
     onFieldChange(formattedValue);
     const result = validateItem(name, formattedValue[name]);
     if (result) result.then(onValidate, onValidate);
@@ -94,7 +101,7 @@ export class Field extends Component {
     const {
       name, onFieldChange, validateTrigger,
     } = this.props;
-    const formattedValue = this.valueHandler(e, value, name);
+    const formattedValue = this.format(e, value, name);
     onFieldChange(formattedValue);
     if (this.props[validateTrigger]) {
       this.props[validateTrigger](e, value, ...args);
@@ -106,7 +113,7 @@ export class Field extends Component {
       return;
     }
     const { name, validateItem, onValidate } = this.props;
-    const formattedValue = this.valueHandler(e, value, name);
+    const formattedValue = this.format(e, value, name);
     const result = validateItem(name, formattedValue[name]);
     if (result) result.then(onValidate, onValidate);
   };

@@ -73,14 +73,18 @@ class ReduxForm extends React.PureComponent {
         <ValidationField
           name="name"
           label="用户名"
+          // formatter={value => ({
+          //   name: value,
+          //   password: value,
+          // })}
           validateTrigger="onBlur">
           <TextField placeholder="Username" />
         </ValidationField>
         <ValidationField
           name="password"
           label="密码"
-          trigger="onBlur"
-          valuePropName="defaultValue"
+          // trigger="onBlur"
+          // valuePropName="defaultValue"
           validateTrigger="onBlur">
           <TextField placeholder="Password" type="password" />
         </ValidationField>
