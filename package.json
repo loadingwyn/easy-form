@@ -1,6 +1,6 @@
 {
   "name": "easy-form",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A React HOC for validating form easily",
   "main": "dist/bundle.js",
   "scripts": {
