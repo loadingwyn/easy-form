@@ -97,4 +97,4 @@ function fieldRender({
   );
 }
 const Demo = createForm({}, rules, { fieldRender })(AntdForm);
-storiesOf('Form 扩展', module).add('with antd', () => <Demo />);
+storiesOf('Form with Antd', module).add('login', () => <Demo />);

@@ -53,4 +53,4 @@ class LoginForm extends React.PureComponent {
 }
 
 const Demo = createForm({}, rules)(LoginForm);
-storiesOf('Form 表单', module).add('基本', () => <Demo />);
+storiesOf('Default', module).add('login', () => <Demo />);

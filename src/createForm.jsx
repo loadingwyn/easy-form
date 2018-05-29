@@ -148,17 +148,15 @@ export default (
       });
       return this.state.validator.validate(
         values,
-        errors => {
-          this.setState(state => ({
-            errors: {
-              ...state.errors,
-              ...errors,
-            },
-          }));
+        () => {
         },
         {
-          fieldCallback: name => {
+          fieldCallback: (name, fieldError) => {
             this.setState(state => ({
+              errors: {
+                ...state.errors,
+                [name]: fieldError,
+              },
               validatings: {
                 ...state.validatings,
                 [name]: false,

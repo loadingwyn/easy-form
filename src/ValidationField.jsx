@@ -55,9 +55,9 @@ export class Field extends Component {
     const { valuePropName } = this.props;
     if (!e.preventDefault) {
       newValue = e;
-    } else if (value) {
+    } else if (value != null) {
       newValue = value;
-    } else if (e.target[valuePropName]) {
+    } else if (e.target[valuePropName] != null) {
       newValue = e.target[valuePropName];
     } else {
       newValue = e.target.value;
