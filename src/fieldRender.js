@@ -40,6 +40,7 @@ fieldRender.propTypes = {
   error: PropTypes.string,
   label: PropTypes.string,
   validating: PropTypes.bool,
+  dataBindProps: PropTypes.object,
 };
 
 fieldRender.defaultProps = {
@@ -47,6 +48,7 @@ fieldRender.defaultProps = {
   error: '',
   label: '',
   validating: false,
+  dataBindProps: {},
 };
 
 export default fieldRender;

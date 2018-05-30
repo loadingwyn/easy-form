@@ -38,7 +38,7 @@ export class Field extends Component {
     formatter: PropTypes.func,
     /**
      * Render Props.
-     * @param {object} props Refer to fieldRender.
+     * @param {object} props Please refer to `fieldRender`.
      * @returns {object} The React node to be rendered.
      */
     render: PropTypes.func.isRequired,

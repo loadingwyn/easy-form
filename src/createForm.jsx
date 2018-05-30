@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Validator from 'validator-runner';
 import FormContext from './FormContext';
 import render from './fieldRender';
-// import PropTypes from 'prop-types';
 
 export default (
   /**
@@ -19,8 +19,26 @@ export default (
   options = {},
 ) => ComposedComponent =>
   class extends Component {
-    static defaultProps = {};
+    static defaultProps = {
 
+    };
+
+    static propTypes = {
+      /**
+       * The values of the form.
+       */
+      defaultValues: PropTypes.object,
+      /**
+       * The validation rules of the form.
+       */
+      defaultRules: PropTypes.object,
+      /**
+       * Handler while value of any field is changed
+       * @param {object} changedValue The value of the changed input.
+       * @param {object} allValue The values of the whole form.
+       */
+      onChange: PropTypes.func,
+    }
     initialized = true;
     constructor(props, context) {
       super(props, context);
@@ -148,8 +166,7 @@ export default (
       });
       return this.state.validator.validate(
         values,
-        () => {
-        },
+        () => {},
         {
           fieldCallback: (name, fieldError) => {
             this.setState(state => ({

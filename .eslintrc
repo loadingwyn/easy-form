@@ -40,6 +40,7 @@
       "after-props"
     ],
     "react/sort-comp": 0,
+    "react/forbid-prop-types": 0,
     "import/no-extraneous-dependencies": [
       "error",
       {
