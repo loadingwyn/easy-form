@@ -82,9 +82,6 @@ class MaterialUIForm extends React.PureComponent {
           type="submit"
           variant="raised"
           color="primary"
-          style={{
-            marginLeft: '10px',
-          }}
           disabled={!isValid || submitting}>
           登录
         </Button>
@@ -109,8 +106,8 @@ function fieldRender({
   const input = cloneElement(children, Object.assign({
     id,
     ...dataBindProps,
-    error: error && error.length > 0,
   }, isInput ? {
+    error: error && error.length > 0,
     endAdornment: validating ? (
       <InputAdornment position="end">
         <CircularProgress size={20} />

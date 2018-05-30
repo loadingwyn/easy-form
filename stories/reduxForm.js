@@ -104,10 +104,7 @@ class ReduxForm extends React.PureComponent {
         </Button>
         <Button
           onClick={() => initialize()}
-          color="primary"
-          style={{
-            marginLeft: '10px',
-          }}>
+          color="primary">
           恢复
         </Button>
       </form>
