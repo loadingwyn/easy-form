@@ -4,7 +4,7 @@
 
 ## Example
 
-![Material-UI](demo/material.png)
+![Material-UI](demo/materialui.png)
 
 <!-- ![Ant Design](demo/antdesign.png) -->
 
