@@ -83,7 +83,7 @@ class MaterialUIForm extends React.PureComponent {
           variant="raised"
           color="primary"
           disabled={!isValid || submitting}>
-          登录
+          Login
         </Button>
       </form>
     );
