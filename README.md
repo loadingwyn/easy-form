@@ -2,25 +2,24 @@
 
 > Easy Form is a React HOC that allow you to build forms easily and flexibly.
 
-
 ## Example
 
-![Material-UI](demo/materialui.png)
-<!-- ![Ant Design](demo/antdesign.png) -->
+![Material-UI](demo/material.png)
 
+<!-- ![Ant Design](demo/antdesign.png) -->
 
 ## Features
 
-* easy: manage form state conveniently
-* flexible: create awesome form easily with Material-UI, Ant-Design, Redux or any library you like.
-* powerful: support sync/async validation both.
-* tiny: only 19.7kb ungzipped.
+- easy: manage form state conveniently
+- flexible: create awesome form easily with Material-UI, Ant-Design, Redux or any library you like.
+- powerful: support sync/async validation both.
+- tiny: only 19.7kb ungzipped.
 
 ## Get Started
 
-1. Run `yarn add easy-form`
+1.  Run `yarn add easy-form`
 
-2. Render it!
+2.  Render it!
 
 ```js
 import React from 'react';
