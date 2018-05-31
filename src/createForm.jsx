@@ -39,18 +39,18 @@ export default (
        */
       onChange: PropTypes.func,
     }
-    initialized = true;
+    isPristine = true;
     constructor(props, context) {
       super(props, context);
       const { values = defaultValues, rules = defaultRules } = props;
-      const { formOptions } = options;
+      const { validationOptions } = options;
       this.originalData = values;
       this.state = {
         values: this.originalData,
         errors: {},
         validatings: {},
         submitting: false,
-        validator: new Validator(rules, formOptions),
+        validator: new Validator(rules, validationOptions),
       };
       this.lastValidation = {};
     }
@@ -58,7 +58,7 @@ export default (
     static getDerivedStateFromProps(nextProps, prevState) {
       const { rules, values } = nextProps;
       const nextState = {};
-      const { formOptions } = options;
+      const { validationOptions } = options;
       if (nextProps.values !== prevState.lastValues) {
         Object.assign(nextState, {
           values,
@@ -67,7 +67,7 @@ export default (
       }
       if (nextProps.rules !== prevState.lastRules) {
         Object.assign(nextState, {
-          validator: new Validator(rules, formOptions),
+          validator: new Validator(rules, validationOptions),
           lastRules: nextProps.rules,
         });
       }
@@ -79,7 +79,7 @@ export default (
         onChange,
       } = this.props;
       let allValues;
-      this.initialized = false;
+      this.isPristine = false;
       this.setState(state => {
         allValues = {
           ...state.values,
@@ -106,7 +106,7 @@ export default (
         onFieldsReset,
       } = options;
       this.state.validator.cancelAll();
-      this.initialized = true;
+      this.isPristine = true;
       if (onFieldsReset) {
         onFieldsReset(this.props, newData || this.originalData, this.setFormValues);
       } else {
@@ -131,7 +131,7 @@ export default (
         },
       }));
       const validation = this.state.validator.validateItem(
-        { [name]: value },
+        { [name]: value != null ? value : this.state.values[name] },
         name,
         errors => {
           this.setState(state => ({
@@ -221,7 +221,7 @@ export default (
           <ComposedComponent
             {...this.state}
             {...other}
-            isvalidating={
+            isValidating={
               Object.values(this.state.validatings).filter(msg => msg).length > 0
             }
             isValid={
@@ -231,7 +231,7 @@ export default (
             validateItem={this.validateItem}
             initialize={this.initialize}
             submit={this.submit}
-            isInitialized={this.initialized} />
+            isPristine={this.isPristine} />
         </FormContext.Provider>
       );
     }
