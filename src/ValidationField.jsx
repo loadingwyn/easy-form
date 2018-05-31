@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withFormData } from './FormContext';
 
-export class Field extends Component {
+class Field extends Component {
   static propTypes = {
     /**
      * Prop that should be validated. For example, the `valuePropName` of checkbox is `checked`.
