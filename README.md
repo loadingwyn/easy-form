@@ -125,7 +125,7 @@ Default values of the form.
 The validation rules of the form. You pass an array to customize more than one validators. And the validators will be executed sequentially.
 If validation passes, it should return `true` or a resolved promise. Else, it should return `false` or a rejected promise. The message should be a string or a function that receives value of input and result of validation and returns a string.
 
-##### options: `object`
+#### options: `object`
 
 | Property          | Type   | Default value | Description                                                                                                                                                                                                                                       |
 | :---------------- | :----- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
