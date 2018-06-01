@@ -138,9 +138,9 @@ If the form has been decorated by `createForm` then it owns APIs as follows:
 
 | Property     | Type | Description                                                                                                                                                                                            |
 | :----------- | :--- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| isValid      | bool | If the form is valid (has no validation error).                                                                                                                                                        |
-| isPristine   | bool | If current form values are different from the initial values.                                                                                                                                          |
-| isValidating | bool | If the form is validating.                                                                                                                                                                             |
+| isValid      | bool | Whether the form is valid (has no validation error).                                                                                                                                                   |
+| isPristine   | bool | Whether the current values of form are different from the initial values.                                                                                                                              |
+| isValidating | bool | Whether the form is validating.                                                                                                                                                                        |
 | initialize   | func | Resets the form to specified values.                                                                                                                                                                   |
 | submit       | func | Submits the form. Returns a promise that will be resolved when the form is submitted successfully, or rejected if the submission fails.<br /> Arguments: <br /> onSuccess: `func`<br /> onFail: `func` |
 | validateAll  | func | Validates the form.                                                                                                                                                                                    |
@@ -148,12 +148,12 @@ If the form has been decorated by `createForm` then it owns APIs as follows:
 
 ### ValidationField
 
-| Property        | Type   | Default value | Description                                                                                                                                                                            |
-| :-------------- | :----- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| formatter       | func   |               | Handler that format the input. <br /> Arguments: <br /> value: `string | boolean | number` — The value of input.<br /> Returns `object` — The formatted value.                         |
-| name            | string | Required      | The unique identifier of field, corresponding to a value in the form values.                                                                                                           |
-| onValidate      | func   |               | Callback fired after validation.<br /> Arguments: <br /> result: `object` — The result of validation. You can pull out the return of the validator by accessing `result.promiseValue`. |
-| render          | func   | Required      | Render Props. <br /> Arguments: <br />props: `object` — Please refer to `options.fieldRender`. <br />Returns `object` — The React node to render.                                      |
-| trigger         | string | onChange      | When to collect the value of children node.                                                                                                                                            |
-| validateTrigger | string | onChange      | When to validate the value of children node.                                                                                                                                           |
-| valuePropName   | string | value         | Prop that should be validated. For example, the valuePropName of checkbox is checked.                                                                                                  |
+| Property        | Type   | Default value | Description                                                                                                                                                                               |
+| :-------------- | :----- | :------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| formatter       | func   |               | The andler that format the value. <br /> Arguments: <br /> value: `string &verbar; boolean &verbar; number` — The value of input.<br /> Returns `object` — The formatted value.           |
+| name            | string | Required      | The unique identifier of field, corresponding to a value in the form values.                                                                                                              |
+| onValidate      | func   |               | Callback fired after validation.<br /> Arguments: <br /> result: `object` — The result of validation. You can pull out the return of the validator by accessing `result.promiseValue`.    |
+| render          | func   | Required      | A render prop. Use the property to get what to render.<br /> Arguments: <br />props: `object` — Please refer to `options.fieldRender`. <br />Returns `object` — The React node to render. |
+| trigger         | string | onChange      | When to collect the value of children node.                                                                                                                                               |
+| validateTrigger | string | onChange      | When to validate the value of children node.                                                                                                                                              |
+| valuePropName   | string | value         | Prop that should be validated. For example, the `valuePropName` of checkbox is `checked`.                                                                                                 |
