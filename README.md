@@ -4,6 +4,8 @@
 
 ## Example
 
+[Demo](storybook-static/index.html)
+
 ![Material-UI](demo/materialui.png)
 
 <!-- ![Ant Design](demo/antdesign.png) -->
@@ -25,7 +27,7 @@
 import React from 'react';
 import { ValidationField, createForm } from '../src';
 
-const rules = {
+const schema = {
   name: {
     validator: name =>
       new Promise((res, rej) => {
@@ -75,7 +77,7 @@ class LoginForm extends React.PureComponent {
   }
 }
 
-export default createForm({}, rules)(LoginForm);
+export default createForm({}, schema)(LoginForm);
 ```
 
 ## Apis
