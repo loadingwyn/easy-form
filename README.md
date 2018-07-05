@@ -4,7 +4,7 @@
 
 ## Example
 
-[Demo](storybook-static/index.html)
+[Demo](demo/storybook-static/index.html)
 
 ![Material-UI](demo/materialui.png)
 
