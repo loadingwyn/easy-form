@@ -17,7 +17,7 @@
 
 ## Get Started
 
-1.  Run `yarn add easy-form React Prop-types`
+1.  Run `yarn add easy-form react react-dom prop-types`
 
 2.  Render it!
 
