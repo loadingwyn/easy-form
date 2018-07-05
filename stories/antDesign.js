@@ -8,17 +8,19 @@ const FormItem = Form.Item;
 
 const rules = {
   name: {
-    validator: name =>
-      new Promise((res, rej) => {
+    rules: {
+      validator: name => new Promise((res, rej) => {
         setTimeout(() => {
-          if (name) {
+          if (name[0]) {
             res(name);
           } else {
             rej(name);
           }
         }, 200);
       }),
-    message: '用户名不能为空',
+      message: '用户名不能为空',
+    },
+    withFields: ['password'],
   },
   password: {
     validator: password => password,
@@ -32,6 +34,7 @@ class AntdForm extends React.PureComponent {
     const { submit } = this.props;
     submit(data => console.log(data), error => console.log(error))();
   };
+
   render() {
     const { isValid, submitting, initialize } = this.props;
     return (
@@ -57,9 +60,9 @@ class AntdForm extends React.PureComponent {
             onClick={() => initialize()}
             color="primary"
             style={{
-            marginLeft: '10px',
-          }}>
-          恢复
+              marginLeft: '10px',
+            }}>
+            恢复
           </Button>
         </FormItem>
       </form>

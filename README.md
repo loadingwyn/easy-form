@@ -17,7 +17,7 @@
 
 ## Get Started
 
-1.  Run `yarn add easy-form`
+1.  Run `yarn add easy-form React Prop-types`
 
 2.  Render it!
 
@@ -85,7 +85,7 @@ export default createForm({}, rules)(LoginForm);
 #### usage:
 
 ```js
-const rules = {
+const schema = {
   birth: {
     validator: date => (date ? true : false),
     message: 'Please input your date of birth',
@@ -111,7 +111,7 @@ const DecoratedForm = createForm(
   {
     birth: '2018-05-28',
   },
-  rules,
+  schema,
   { fieldRender },
 )(CustomizedForm);
 ```
@@ -120,19 +120,18 @@ const DecoratedForm = createForm(
 
 Default values of the form.
 
-#### defaultRules: `object`
+#### schema: `object`
 
 The validation rules of the form. You pass an array to customize more than one validators. And the validators will be executed sequentially.
 If validation passes, it should return `true` or a resolved promise. Else, it should return `false` or a rejected promise. The message should be a string or a function that receives value of input and result of validation and returns a string.
 
 #### options: `object`
 
-| Property          | Type   | Default value | Description                                                                                                                                                                                                                                       |
-| :---------------- | :----- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| validationOptions | object | {}            | Please refer to `validation-runner`                                                                                                                                                                                                               |
-| fieldRender       | func   | `fieldRender` | The field render prop. <br /> Arguments: <br /> fieldProps: `object` - Props collection of form field <br > Returns `object` — The React node to render.                                                                                          |
-| onFieldsChange    | func   |               | Callback fired when the value of `ValidationField` gets changed.<br /> Arguments: <br /> props: `object` — Props of The form component <br /> changedValue: `object` — Value of the changed field <br /> defaultHandler: `func` - Default handler |
-| onFieldsReset     | func   |               | Callback fired when the form is reset.<br /> Arguments: <br /> props: `object` — Props of The form component <br /> newValues: `object` — The reset value <br /> defaultHandler: `func` - Default handler                                         |
+| Property       | Type | Default value | Description                                                                                                                                                                                                                                       |
+| :------------- | :--- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| fieldRender    | func | `fieldRender` | The field render prop. <br /> Arguments: <br /> fieldProps: `object` - Props collection of form field <br > Returns `object` — The React node to render.                                                                                          |
+| onFieldsChange | func |               | Callback fired when the value of `ValidationField` gets changed.<br /> Arguments: <br /> props: `object` — Props of The form component <br /> changedValue: `object` — Value of the changed field <br /> defaultHandler: `func` - Default handler |
+| onFieldsReset  | func |               | Callback fired when the form is reset.<br /> Arguments: <br /> props: `object` — Props of The form component <br /> newValues: `object` — The reset value <br /> defaultHandler: `func` - Default handler                                         |
 
 If the form has been decorated by `createForm` then it owns APIs as follows:
 
@@ -143,6 +142,8 @@ If the form has been decorated by `createForm` then it owns APIs as follows:
 | isValidating | bool | Whether the form is validating.                                                                                                                                                                        |
 | initialize   | func | Resets the form to specified values.                                                                                                                                                                   |
 | submit       | func | Submits the form. Returns a promise that will be resolved when the form is submitted successfully, or rejected if the submission fails.<br /> Arguments: <br /> onSuccess: `func`<br /> onFail: `func` |
+| updateValues | func | Updates values of the form. <br /> Arguments: <br /> newValues: `object`                                                                                                                               |
+| updateSchema | func | Updates schema of the form. <br /> Arguments: <br /> newSchema: `object`                                                                                                                               |
 | validateAll  | func | Validates the form.                                                                                                                                                                                    |
 | validateItem | func | Validates the specified field. <br /> Arguments: <br /> name: `string` - Name of the field to validate <br />                                                                                          |
 

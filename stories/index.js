@@ -4,16 +4,15 @@ import { ValidationField, createForm } from '../src';
 
 const rules = {
   name: {
-    validator: name =>
-      new Promise((res, rej) => {
-        setTimeout(() => {
-          if (name) {
-            res(name);
-          } else {
-            rej(name);
-          }
-        }, 200);
-      }),
+    validator: name => new Promise((res, rej) => {
+      setTimeout(() => {
+        if (name) {
+          res(name);
+        } else {
+          rej(name);
+        }
+      }, 200);
+    }),
     message: '用户名不能为空',
   },
   password: {
@@ -28,11 +27,15 @@ class LoginForm extends React.PureComponent {
     const { submit } = this.props;
     submit(data => console.log(data), error => console.log(error))();
   };
+
   render() {
     const { isValid } = this.props;
     return (
       <form onSubmit={this.handleSubmit}>
-        <ValidationField name="name" label="Username">
+        <ValidationField
+          name="name"
+          label="Username"
+          onValidate={(...params) => console.log(...params)}>
           <input placeholder="Username" />
         </ValidationField>
         <ValidationField name="password" label="Password">

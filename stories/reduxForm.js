@@ -42,16 +42,15 @@ const store = createStore(
 /* eslint-enable */
 const rules = {
   name: {
-    validator: name =>
-      new Promise((res, rej) => {
-        setTimeout(() => {
-          if (name) {
-            res(name);
-          } else {
-            rej(name);
-          }
-        }, 200);
-      }),
+    validator: name => new Promise((res, rej) => {
+      setTimeout(() => {
+        if (name) {
+          res(name);
+        } else {
+          rej(name);
+        }
+      }, 200);
+    }),
     message: '用户名不能为空',
   },
   password: {
@@ -66,6 +65,7 @@ class ReduxForm extends React.PureComponent {
     const { submit } = this.props;
     submit(data => console.log(data), error => console.log(error))();
   };
+
   // handleChange = value => {
   //   const { update } = this.props;
   //   update(value);
@@ -73,7 +73,9 @@ class ReduxForm extends React.PureComponent {
   render() {
     const { isValid, initialize } = this.props;
     return (
-      <form onSubmit={this.handleSubmit} style={{ margin: '40px', maxWidth: '400px' }}>
+      <form
+        onSubmit={this.handleSubmit}
+        style={{ margin: '40px', maxWidth: '400px' }}>
         <ValidationField
           name="name"
           label="用户名"
@@ -102,9 +104,7 @@ class ReduxForm extends React.PureComponent {
           disabled={!isValid}>
           登录
         </Button>
-        <Button
-          onClick={() => initialize()}
-          color="primary">
+        <Button onClick={() => initialize()} color="primary">
           恢复
         </Button>
       </form>
@@ -122,50 +122,74 @@ function fieldRender({
   dataBindProps,
   isInput,
 }) {
-  const labelNode =
-    <InputLabel htmlFor={id}>{label}</InputLabel>;
-  const input = cloneElement(children, Object.assign({
-    id,
-    ...dataBindProps,
-    error: error && error.length > 0,
-  }, isInput ? {
-    endAdornment: validating ? (
-      <InputAdornment position="end">
-        <CircularProgress size={20} />
-        <span />
-      </InputAdornment>) : null,
-    ...children.props.endAdornment,
-  } : null));
+  const labelNode = (
+    <InputLabel htmlFor={id}>
+      {label}
+    </InputLabel>
+  );
+  const input = cloneElement(
+    children,
+    Object.assign(
+      {
+        id,
+        ...dataBindProps,
+        error: error && error.length > 0,
+      },
+      isInput
+        ? {
+          endAdornment: validating ? (
+            <InputAdornment position="end">
+              <CircularProgress size={20} />
+              <span />
+            </InputAdornment>
+          ) : null,
+          ...children.props.endAdornment,
+        }
+        : null,
+    ),
+  );
   return (
-    <FormControl fullWidth error={error && error.length > 0} style={{ marginTop: '6px' }} required={required}>
+    <FormControl
+      fullWidth
+      error={error && error.length > 0}
+      style={{ marginTop: '6px' }}
+      required={required}>
       {labelNode}
       {input}
-      <FormHelperText>{error ? error[0] : ''}</FormHelperText>
-    </FormControl>);
+      <FormHelperText>
+        {error ? error[0] : ''}
+      </FormHelperText>
+    </FormControl>
+  );
 }
 
 const Demo = connect(
   state => ({
     values: state.formData,
   }),
-  dispatch =>
-    bindActionCreators(
-      {
-        update: actionCreator,
-        reset: resetActionCreator,
-      },
-      dispatch,
-    ),
-)(createForm({}, rules, {
-  fieldRender,
-  onFieldsChange: (props, value) => {
-    props.update(value);
-  },
-  onFieldsReset: (props, value) => {
-    props.reset(value);
-  },
-})(ReduxForm));
+  dispatch => bindActionCreators(
+    {
+      update: actionCreator,
+      reset: resetActionCreator,
+    },
+    dispatch,
+  ),
+)(
+  createForm({}, rules, {
+    fieldRender,
+    onFieldsChange: (props, value) => {
+      props.update(value);
+    },
+    onFieldsReset: (props, value) => {
+      props.reset(value);
+    },
+  })(ReduxForm),
+);
 
 storiesOf('Form with Material-ui', module)
-  .addDecorator(story => <Provider store={store}>{story()}</Provider>)
+  .addDecorator(story => (
+    <Provider store={store}>
+      {story()}
+    </Provider>
+  ))
   .add('login with redux', () => <Demo />);

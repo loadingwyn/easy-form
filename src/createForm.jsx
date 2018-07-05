@@ -12,72 +12,59 @@ export default (
   /**
    * Validation rules.
    */
-  defaultRules = {},
+  schema = {},
   /**
    * Form options.
    */
   options = {},
-) => ComposedComponent =>
-  class extends Component {
+) => ComposedComponent => class extends Component {
     static defaultProps = {
-
+      values: defaultValues,
     };
 
     static propTypes = {
       /**
        * The values of the form.
        */
-      defaultValues: PropTypes.object,
-      /**
-       * The validation rules of the form.
-       */
-      defaultRules: PropTypes.object,
+      values: PropTypes.object,
       /**
        * Handler while value of any field is changed
        * @param {object} changedValue The value of the changed input.
        * @param {object} allValue The values of the whole form.
        */
       onChange: PropTypes.func,
-    }
+    };
+
     isPristine = true;
+
     constructor(props, context) {
       super(props, context);
-      const { values = defaultValues, rules = defaultRules } = props;
-      const { validationOptions } = options;
+      const { values } = props;
       this.originalData = values;
+      this.schema = schema;
       this.state = {
         values: this.originalData,
         errors: {},
         validatings: {},
         submitting: false,
-        validator: new Validator(rules, validationOptions),
       };
-      this.lastValidation = {};
+      this.validator = new Validator(schema, options);
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-      const { rules, values } = nextProps;
+      const { values } = nextProps;
       const nextState = {};
-      const { validationOptions } = options;
       if (nextProps.values !== prevState.lastValues) {
         Object.assign(nextState, {
           values,
           lastValues: nextProps.values,
         });
       }
-      if (nextProps.rules !== prevState.lastRules) {
-        Object.assign(nextState, {
-          validator: new Validator(rules, validationOptions),
-          lastRules: nextProps.rules,
-        });
-      }
       return nextState;
     }
 
     getFieldValue = (value = {}) => {
-      const {
-        onChange,
-      } = this.props;
+      const { onChange } = this.props;
       let allValues;
       this.isPristine = false;
       this.setState(state => {
@@ -91,9 +78,7 @@ export default (
     };
 
     handleFieldChange = (value = {}) => {
-      const {
-        onFieldsChange,
-      } = options;
+      const { onFieldsChange } = options;
       if (onFieldsChange) {
         onFieldsChange(this.props, value, this.getFieldValue);
       } else {
@@ -102,15 +87,17 @@ export default (
     };
 
     initialize = newData => {
-      const {
-        onFieldsReset,
-      } = options;
-      this.state.validator.cancelAll();
+      const { onFieldsReset } = options;
+      this.validator.cancelAll();
       this.isPristine = true;
       if (onFieldsReset) {
-        onFieldsReset(this.props, newData || this.originalData, this.setFormValues);
+        onFieldsReset(
+          this.props,
+          newData || this.originalData,
+          this.updateValues,
+        );
       } else {
-        this.setFormValues(newData || this.originalData);
+        this.updateValues(newData || this.originalData);
       }
       this.setState(() => ({
         errors: {},
@@ -118,20 +105,27 @@ export default (
       }));
     };
 
-    setFormValues = newValues => {
+    updateValues = newValues => {
       this.setState({
         values: newValues,
       });
-    }
-    validateItem = (name, value) => {
+    };
+
+    updateSchema = newSchema => {
+      this.schema = newSchema;
+      this.validator.setSchema(newSchema);
+    };
+
+    validateItem = (name, value, ...other) => {
+      const { values } = this.state;
       this.setState(state => ({
         validatings: {
           ...state.validatings,
           [name]: true,
         },
       }));
-      const validation = this.state.validator.validateItem(
-        { [name]: value != null ? value : this.state.values[name] },
+      const validation = this.validator.validateItem(
+        Object.assign({}, values, value != null ? { [name]: value } : {}),
         name,
         errors => {
           this.setState(state => ({
@@ -145,51 +139,37 @@ export default (
             },
           }));
         },
+        values,
+        ...other,
       );
       return validation;
     };
 
-    validateAll = () => {
-      const { values } = this.state;
-      const { rules = defaultRules } = this.props;
-      this.setState(state => {
-        const newState = {};
-        Object.keys(rules).forEach(key => {
-          newState[key] = true;
-        });
-        return {
-          validatings: {
-            ...state.validatings,
-            ...newState,
-          },
-        };
-      });
-      return this.state.validator.validate(
-        values,
-        () => {},
-        {
-          fieldCallback: (name, fieldError) => {
-            this.setState(state => ({
-              errors: {
-                ...state.errors,
-                [name]: fieldError,
-              },
-              validatings: {
-                ...state.validatings,
-                [name]: false,
-              },
-            }));
-          },
-        },
-      );
-    };
+    validateAll = () => Promise.all(
+      Object.keys(this.schema).map(field => this.validateItem(field)),
+    );
 
     submit = (onSubmitSuccess, onSubmitFail) => () => {
       this.setState({
         submitting: true,
       });
       return this.validateAll()
-        .then(() => onSubmitSuccess(this.state.values), onSubmitFail)
+        .then(
+          () => {
+            const { values, errors } = this.state;
+            if (
+              Object.values(errors).filter(m => m && m.length > 0).length > 0
+            ) {
+              onSubmitFail(errors);
+            } else {
+              onSubmitSuccess(values);
+            }
+          },
+          () => {
+            const { errors } = this.state;
+            onSubmitFail(errors);
+          },
+        )
         .then(
           () => {
             this.setState({
@@ -205,11 +185,10 @@ export default (
     };
 
     render() {
-      const {
-        onFieldsChange,
-        onChange,
-        ...other
-      } = this.props;
+      const { onFieldsChange, onChange, ...other } = this.props;
+      const { validatings, errors } = this.state;
+      const isValidating = Object.values(validatings).filter(msg => msg).length > 0;
+      const isValid = Object.values(errors).filter(msg => msg && msg.length > 0).length <= 0;
       return (
         <FormContext.Provider
           value={{
@@ -221,12 +200,10 @@ export default (
           <ComposedComponent
             {...this.state}
             {...other}
-            isValidating={
-              Object.values(this.state.validatings).filter(msg => msg).length > 0
-            }
-            isValid={
-              Object.values(this.state.errors).filter(msg => msg && msg.length > 0).length <= 0
-            }
+            updateValues={this.updateValues}
+            updateSchema={this.updateSchema}
+            isValidating={isValidating}
+            isValid={isValid}
             validateAll={this.validateAll}
             validateItem={this.validateItem}
             initialize={this.initialize}
@@ -235,4 +212,4 @@ export default (
         </FormContext.Provider>
       );
     }
-  };
+};

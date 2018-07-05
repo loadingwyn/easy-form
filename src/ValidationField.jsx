@@ -23,7 +23,11 @@ class Field extends Component {
     /**
      * @ignore
      */
-    defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
+    defaultValue: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.bool,
+    ]),
     /**
      * Callback fired after validation.
      * @param {object} result The result of validation.
@@ -42,7 +46,8 @@ class Field extends Component {
      * @returns {object} The React node to be rendered.
      */
     render: PropTypes.func.isRequired,
-  }
+  };
+
   static defaultProps = {
     valuePropName: 'value',
     validateTrigger: 'onChange',
@@ -66,12 +71,12 @@ class Field extends Component {
   }
 
   format(e, oldValue, name) {
-    const {
-      formatter,
-    } = this.props;
+    const { formatter } = this.props;
     const value = this.getValueFromEvent(e, oldValue);
     const formattedValue = formatter ? formatter(value) : value;
-    return typeof formattedValue === 'object' ? formattedValue : { [name]: formattedValue };
+    return typeof formattedValue === 'object'
+      ? formattedValue
+      : { [name]: formattedValue };
   }
 
   handleChangeAndValidate = (e, value, ...args) => {
@@ -84,13 +89,14 @@ class Field extends Component {
       validateItem,
       validateTrigger,
       onValidate,
+      [validateTrigger]: onTrigger,
     } = this.props;
     const formattedValue = this.format(e, value, name);
     onFieldChange(formattedValue);
     const result = validateItem(name, formattedValue[name]);
     if (result) result.then(onValidate, onValidate);
-    if (this.props[validateTrigger]) {
-      this.props[validateTrigger](e, value, ...args);
+    if (onTrigger) {
+      onTrigger(e, value, ...args);
     }
   };
 
@@ -99,12 +105,15 @@ class Field extends Component {
       return;
     }
     const {
-      name, onFieldChange, validateTrigger,
+      name,
+      onFieldChange,
+      validateTrigger,
+      [validateTrigger]: onTrigger,
     } = this.props;
     const formattedValue = this.format(e, value, name);
     onFieldChange(formattedValue);
-    if (this.props[validateTrigger]) {
-      this.props[validateTrigger](e, value, ...args);
+    if (onTrigger) {
+      onTrigger(e, value, ...args);
     }
   };
 
