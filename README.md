@@ -4,7 +4,7 @@
 
 ## Example
 
-[Demo](demo/storybook-static/index.html)
+[Demo](https://loadingwyn.github.io/easy-form)
 
 ![Material-UI](demo/materialui.png)
 
