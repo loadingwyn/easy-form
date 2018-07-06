@@ -160,14 +160,12 @@ export default (
             if (
               Object.values(errors).filter(m => m && m.length > 0).length > 0
             ) {
-              onSubmitFail(errors);
-            } else {
-              onSubmitSuccess(values);
-            }
+              if (onSubmitFail) onSubmitFail(errors);
+            } else if (onSubmitSuccess) onSubmitSuccess(values);
           },
           () => {
             const { errors } = this.state;
-            onSubmitFail(errors);
+            if (onSubmitFail) onSubmitFail(errors);
           },
         )
         .then(

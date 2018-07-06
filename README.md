@@ -6,7 +6,7 @@
 
 [Demo](https://loadingwyn.github.io/easy-form)
 
-![Material-UI](demo/materialui.png)
+![Material-UI](screenshots/materialui.png)
 
 <!-- ![Ant Design](demo/antdesign.png) -->
 

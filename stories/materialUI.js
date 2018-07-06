@@ -49,8 +49,8 @@ const rules = {
 class MaterialUIForm extends React.PureComponent {
   handleSubmit = e => {
     e.preventDefault();
-    const { validateAll } = this.props;
-    validateAll();
+    const { submit } = this.props;
+    submit()();
   };
 
   render() {
