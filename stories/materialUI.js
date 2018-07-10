@@ -54,7 +54,13 @@ class MaterialUIForm extends React.PureComponent {
   };
 
   render() {
-    const { isValid, submitting } = this.props;
+    const {
+      isValid,
+      isSubmitting,
+      isPristine,
+      values,
+      updateFieldValue,
+    } = this.props;
     return (
       <form
         onSubmit={this.handleSubmit}
@@ -105,8 +111,13 @@ Thirty
           type="submit"
           variant="raised"
           color="primary"
-          disabled={!isValid || submitting}>
+          disabled={!isValid || isSubmitting || !values.terms || isPristine}>
           Login
+        </Button>
+        <Button
+          color="primary"
+          onClick={() => updateFieldValue('gender', 'male', true)}>
+          set
         </Button>
       </form>
     );
@@ -170,6 +181,7 @@ function fieldRender({
 const Demo = createForm(
   {
     birth: '2018-05-28',
+    terms: false,
   },
   rules,
   { fieldRender },

@@ -30,7 +30,7 @@ export default (
       /**
        * Handler while value of any field is changed
        * @param {object} changedValue The value of the changed input.
-       * @param {object} allValue The values of the whole form.
+       * @param {object} values The values of the whole form.
        */
       onChange: PropTypes.func,
     };
@@ -46,7 +46,7 @@ export default (
         values: this.originalData,
         errors: {},
         validatings: {},
-        submitting: false,
+        isSubmitting: false,
       };
       this.validator = new Validator(schema, options);
     }
@@ -65,16 +65,16 @@ export default (
 
     getFieldValue = (value = {}) => {
       const { onChange } = this.props;
-      let allValues;
+      let values;
       this.isPristine = false;
       this.setState(state => {
-        allValues = {
+        values = {
           ...state.values,
           ...value,
         };
-        return { values: allValues };
+        return { values };
       });
-      if (onChange) onChange(value, allValues);
+      if (onChange) onChange(value, values);
     };
 
     handleFieldChange = (value = {}) => {
@@ -109,6 +109,18 @@ export default (
       this.setState({
         values: newValues,
       });
+    };
+
+    updateFieldValue = (name, newValue, shouldValidate = false) => {
+      this.isPristine = false;
+      this.setState(state => ({
+        values: Object.assign({}, state.values, {
+          [name]: newValue,
+        }),
+      }));
+      if (shouldValidate) {
+        this.validateItem(name, newValue);
+      }
     };
 
     updateSchema = newSchema => {
@@ -151,7 +163,7 @@ export default (
 
     submit = (onSubmitSuccess, onSubmitFail) => () => {
       this.setState({
-        submitting: true,
+        isSubmitting: true,
       });
       return this.validateAll()
         .then(
@@ -171,12 +183,12 @@ export default (
         .then(
           () => {
             this.setState({
-              submitting: false,
+              isSubmitting: false,
             });
           },
           () => {
             this.setState({
-              submitting: false,
+              isSubmitting: false,
             });
           },
         );
@@ -196,8 +208,9 @@ export default (
             render: options.fieldRender || render,
           }}>
           <ComposedComponent
-            {...this.state}
             {...other}
+            {...this.state}
+            updateFieldValue={this.updateFieldValue}
             updateValues={this.updateValues}
             updateSchema={this.updateSchema}
             isValidating={isValidating}

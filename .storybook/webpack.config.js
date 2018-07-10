@@ -8,6 +8,5 @@
 const config = require('../webpack.config.js');
 module.exports = (baseConfig, env, defaultConfig) => {
   defaultConfig.module = config.module;
-
   return defaultConfig;
 };

@@ -2,6 +2,7 @@
 // const webpack = require('webpack');
 
 module.exports = {
+  target: 'web',
   output: {
     library: 'easy-form',
     libraryTarget: 'umd',
