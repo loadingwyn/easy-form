@@ -132,8 +132,8 @@ If validation passes, it should return `true` or a resolved promise. Else, it sh
 | Property       | Type | Default value | Description                                                                                                                                                                                                                                       |
 | :------------- | :--- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | fieldRender    | func | `fieldRender` | The field render prop. <br /> Arguments: <br /> fieldProps: `object` - Props collection of form field <br > Returns `object` — The React node to render.                                                                                          |
-| onFieldsChange | func |               | Callback fired when the value of `ValidationField` gets changed.<br /> Arguments: <br /> props: `object` — Props of The form component <br /> changedValue: `object` — Value of the changed field <br /> defaultHandler: `func` - Default handler |
-| onFieldsReset  | func |               | Callback fired when the form is reset.<br /> Arguments: <br /> props: `object` — Props of The form component <br /> newValues: `object` — The reset value <br /> defaultHandler: `func` - Default handler                                         |
+| onFormChange | func |               | Callback fired when the value of `ValidationField` gets changed.<br /> Arguments: <br /> props: `object` — Props of The form component <br /> changedValue: `object` — Value of the changed field <br /> defaultHandler: `func` - Default handler |
+| onFormReset  | func |               | Callback fired when the form is reset.<br /> Arguments: <br /> props: `object` — Props of The form component <br /> newValues: `object` — The reset value <br /> defaultHandler: `func` - Default handler                                         |
 
 If the form has been decorated by `createForm` then it owns APIs as follows:
 

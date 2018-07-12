@@ -87,6 +87,6 @@
     "react-dom": "^16.0.0"
   },
   "dependencies": {
-    "validator-runner": "^0.2.0"
+    "validator-runner": "^0.3.0"
   }
 }

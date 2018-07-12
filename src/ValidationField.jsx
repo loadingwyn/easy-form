@@ -55,6 +55,20 @@ class Field extends Component {
     defaultValue: '',
   };
 
+  componentDidMount() {
+    const { subscribe, name } = this.props;
+    if (subscribe) {
+      subscribe(name, this.handleValidate);
+    }
+  }
+
+  componentWillUnmount() {
+    const { unSubscribe, name } = this.props;
+    if (unSubscribe) {
+      unSubscribe(name);
+    }
+  }
+
   getValueFromEvent(e, value) {
     let newValue;
     const { valuePropName } = this.props;
@@ -93,7 +107,7 @@ class Field extends Component {
     } = this.props;
     const formattedValue = this.format(e, value, name);
     onFieldChange(formattedValue);
-    const result = validateItem(name, formattedValue[name]);
+    const result = validateItem(name, formattedValue[name], this.props);
     if (result) result.then(onValidate, onValidate);
     if (onTrigger) {
       onTrigger(e, value, ...args);
@@ -118,13 +132,16 @@ class Field extends Component {
   };
 
   handleValidate = (e, value) => {
-    if (!e) {
-      return;
-    }
+    let result;
     const { name, validateItem, onValidate } = this.props;
-    const formattedValue = this.format(e, value, name);
-    const result = validateItem(name, formattedValue[name]);
+    if (!e) {
+      result = validateItem(name, null, this.props);
+    } else {
+      const formattedValue = this.format(e, value, name);
+      result = validateItem(name, formattedValue[name], this.props);
+    }
     if (result) result.then(onValidate, onValidate);
+    return result;
   };
 
   render() {

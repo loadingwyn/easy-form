@@ -30,10 +30,7 @@ const rules = {
     message: 'Please input your name',
   },
   gender: {
-    validator: (gender, ...other) => {
-      console.log(other);
-      return gender;
-    },
+    validator: gender => gender,
     message: 'Please choose your gender',
   },
   age: {
@@ -50,7 +47,7 @@ class MaterialUIForm extends React.PureComponent {
   handleSubmit = e => {
     e.preventDefault();
     const { submit } = this.props;
-    submit()();
+    submit(data => console.log(data), error => console.log(error))();
   };
 
   render() {
@@ -60,6 +57,7 @@ class MaterialUIForm extends React.PureComponent {
       isPristine,
       values,
       updateFieldValue,
+      initialize,
     } = this.props;
     return (
       <form
@@ -114,10 +112,13 @@ Thirty
           disabled={!isValid || isSubmitting || !values.terms || isPristine}>
           Login
         </Button>
+        <Button onClick={initialize} color="primary">
+          Reset
+        </Button>
         <Button
           color="primary"
           onClick={() => updateFieldValue('gender', 'male', true)}>
-          set
+          Set
         </Button>
       </form>
     );

@@ -177,11 +177,11 @@ const Demo = connect(
 )(
   createForm({}, rules, {
     fieldRender,
-    onFieldsChange: (props, value) => {
-      props.update(value);
+    onFormChange: ({ update }, value) => {
+      update(value);
     },
-    onFieldsReset: (props, value) => {
-      props.reset(value);
+    onFormReset: ({ reset }, value) => {
+      reset(value);
     },
   })(ReduxForm),
 );

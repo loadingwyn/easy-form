@@ -31,7 +31,7 @@ class LoginForm extends React.PureComponent {
   render() {
     const { isValid } = this.props;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} style={{ marginTop: 40 }}>
         <ValidationField
           name="name"
           label="Username"

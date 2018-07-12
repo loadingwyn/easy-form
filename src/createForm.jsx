@@ -37,6 +37,8 @@ export default (
 
     isPristine = true;
 
+    fieldValidators = {};
+
     constructor(props, context) {
       super(props, context);
       const { values } = props;
@@ -78,26 +80,22 @@ export default (
     };
 
     handleFieldChange = (value = {}) => {
-      const { onFieldsChange } = options;
-      if (onFieldsChange) {
-        onFieldsChange(this.props, value, this.getFieldValue);
+      const { onFormChange } = options;
+      if (onFormChange) {
+        onFormChange(this.props, value, this.getFieldValue);
       } else {
         this.getFieldValue(value);
       }
     };
 
-    initialize = newData => {
-      const { onFieldsReset } = options;
+    initialize = () => {
+      const { onFormReset } = options;
       this.validator.cancelAll();
       this.isPristine = true;
-      if (onFieldsReset) {
-        onFieldsReset(
-          this.props,
-          newData || this.originalData,
-          this.updateValues,
-        );
+      if (onFormReset) {
+        onFormReset(this.props, this.originalData, this.updateValues);
       } else {
-        this.updateValues(newData || this.originalData);
+        this.updateValues(this.originalData);
       }
       this.setState(() => ({
         errors: {},
@@ -119,8 +117,20 @@ export default (
         }),
       }));
       if (shouldValidate) {
-        this.validateItem(name, newValue);
+        if (this.fieldValidators[name]) {
+          this.fieldValidators[name](newValue);
+        } else {
+          this.validateItem(name, newValue);
+        }
       }
+    };
+
+    subscribe = (name, fieldValidator) => {
+      this.fieldValidators[name] = fieldValidator;
+    };
+
+    unSubscribe = name => {
+      this.fieldValidators[name] = null;
     };
 
     updateSchema = newSchema => {
@@ -158,28 +168,32 @@ export default (
     };
 
     validateAll = () => Promise.all(
-      Object.keys(this.schema).map(field => this.validateItem(field)),
+      Object.keys(this.schema).map(
+        fieldName => (this.fieldValidators[fieldName]
+          ? this.fieldValidators[fieldName]()
+          : this.validateItem(fieldName)),
+      ),
     );
 
     submit = (onSubmitSuccess, onSubmitFail) => () => {
       this.setState({
         isSubmitting: true,
       });
+      const { values } = this.state;
       return this.validateAll()
-        .then(
-          () => {
-            const { values, errors } = this.state;
-            if (
-              Object.values(errors).filter(m => m && m.length > 0).length > 0
-            ) {
-              if (onSubmitFail) onSubmitFail(errors);
-            } else if (onSubmitSuccess) onSubmitSuccess(values);
-          },
-          () => {
-            const { errors } = this.state;
-            if (onSubmitFail) onSubmitFail(errors);
-          },
-        )
+        .then(results => {
+          const errors = {};
+          results.forEach(result => {
+            errors[result.fieldName] = result.errors;
+          });
+          if (Object.values(errors).filter(m => m && m.length > 0).length > 0) {
+            if (onSubmitFail) {
+              onSubmitFail(errors);
+            }
+          } else if (onSubmitSuccess) {
+            onSubmitSuccess(values);
+          }
+        })
         .then(
           () => {
             this.setState({
@@ -195,7 +209,7 @@ export default (
     };
 
     render() {
-      const { onFieldsChange, onChange, ...other } = this.props;
+      const { onFormChange, onChange, ...other } = this.props;
       const { validatings, errors } = this.state;
       const isValidating = Object.values(validatings).filter(msg => msg).length > 0;
       const isValid = Object.values(errors).filter(msg => msg && msg.length > 0).length <= 0;
@@ -206,6 +220,8 @@ export default (
             onFieldChange: this.handleFieldChange,
             validateItem: this.validateItem,
             render: options.fieldRender || render,
+            subscribe: this.subscribe,
+            unSubscribe: this.unSubscribe,
           }}>
           <ComposedComponent
             {...other}

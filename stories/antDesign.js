@@ -16,7 +16,7 @@ const rules = {
           } else {
             rej(name);
           }
-        }, 200);
+        }, 1000);
       }),
       message: '用户名不能为空',
     },
@@ -36,9 +36,9 @@ class AntdForm extends React.PureComponent {
   };
 
   render() {
-    const { isValid, submitting, initialize } = this.props;
+    const { isValid, isSubmitting, initialize } = this.props;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} style={{ marginTop: 40 }}>
         <ValidationField name="name" label="用户名" validateTrigger="onBlur">
           <Input placeholder="Username" />
         </ValidationField>
@@ -47,20 +47,19 @@ class AntdForm extends React.PureComponent {
         </ValidationField>
         <FormItem wrapperCol={{ span: 12, offset: 5 }}>
           <Button
+            loading={isSubmitting}
             htmlType="submit"
-            color="primary"
+            type="primary"
             style={{
               flex: '0 0 auto',
-              marginRight: '20px',
             }}
-            disabled={!isValid || submitting}>
+            disabled={!isValid || isSubmitting}>
             登录
           </Button>
           <Button
-            onClick={() => initialize()}
-            color="primary"
+            onClick={initialize}
             style={{
-              marginLeft: '10px',
+              marginLeft: '6px',
             }}>
             恢复
           </Button>
@@ -77,7 +76,7 @@ const formItemLayout = {
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 12 },
+    sm: { span: 6 },
   },
 };
 
