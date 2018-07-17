@@ -131,11 +131,11 @@ If validation passes, it should return `true` or a resolved promise. Else, it sh
 
 #### options: `Object`
 
-| Property     | Type | Default value | Description                                                                                                                                                                                                                                       |
-| :----------- | :--- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| fieldRender  | Func | `fieldRender` | The field render prop. <br /> Arguments: <br /> fieldProps: `Object` - Props collection of form field <br > Returns `Object` — The React node to render.                                                                                          |
-| onFormChange | Func |               | Callback fired when the value of `ValidationField` gets changed.<br /> Arguments: <br /> props: `Object` — Props of The form component <br /> changedValue: `Object` — Value of the changed field <br /> defaultHandler: `Func` - Default handler |
-| onFormReset  | Func |               | Callback fired when the form is reset.<br /> Arguments: <br /> props: `Object` — Props of The form component <br /> newValues: `Object` — The reset value <br /> defaultHandler: `Func` - Default handler                                         |
+| Property     | Type | Default value                       | Description                                                                                                                                                                                                                                       |
+| :----------- | :--- | :---------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| fieldRender  | Func | [fieldRender](./src/fieldRender.js) | The field render prop. <br /> Arguments: <br /> fieldProps: `Object` - Props collection of form field <br > Returns `Object` — The React node to render.                                                                                          |
+| onFormChange | Func |                                     | Callback fired when the value of `ValidationField` gets changed.<br /> Arguments: <br /> props: `Object` — Props of The form component <br /> changedValue: `Object` — Value of the changed field <br /> defaultHandler: `Func` - Default handler |
+| onFormReset  | Func |                                     | Callback fired when the form is reset.<br /> Arguments: <br /> props: `Object` — Props of The form component <br /> newValues: `Object` — The reset value <br /> defaultHandler: `Func` - Default handler                                         |
 
 If the form has been decorated by `createForm` then it owns APIs as follows:
 
