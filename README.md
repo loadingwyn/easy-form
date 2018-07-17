@@ -118,22 +118,24 @@ const DecoratedForm = createForm(
 )(CustomizedForm);
 ```
 
-#### defaultValues: `object`
+#### defaultValues: `Object`
 
 Default values of the form.
 
-#### schema: `object`
+#### schema: `Object<[field: string]: Validator>`
+
+`validator: (target: any, values: Object, preValues: Object, props: Object) => bool | Promise`
 
 The validation rules of the form. You pass an array to customize more than one validators. And the validators will be executed sequentially.
 If validation passes, it should return `true` or a resolved promise. Else, it should return `false` or a rejected promise. The message should be a string or a function that receives value of input and result of validation and returns a string.
 
-#### options: `object`
+#### options: `Object`
 
 | Property     | Type | Default value | Description                                                                                                                                                                                                                                       |
 | :----------- | :--- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| fieldRender  | func | `fieldRender` | The field render prop. <br /> Arguments: <br /> fieldProps: `object` - Props collection of form field <br > Returns `object` — The React node to render.                                                                                          |
-| onFormChange | func |               | Callback fired when the value of `ValidationField` gets changed.<br /> Arguments: <br /> props: `object` — Props of The form component <br /> changedValue: `object` — Value of the changed field <br /> defaultHandler: `func` - Default handler |
-| onFormReset  | func |               | Callback fired when the form is reset.<br /> Arguments: <br /> props: `object` — Props of The form component <br /> newValues: `object` — The reset value <br /> defaultHandler: `func` - Default handler                                         |
+| fieldRender  | Func | `fieldRender` | The field render prop. <br /> Arguments: <br /> fieldProps: `Object` - Props collection of form field <br > Returns `Object` — The React node to render.                                                                                          |
+| onFormChange | Func |               | Callback fired when the value of `ValidationField` gets changed.<br /> Arguments: <br /> props: `Object` — Props of The form component <br /> changedValue: `Object` — Value of the changed field <br /> defaultHandler: `Func` - Default handler |
+| onFormReset  | Func |               | Callback fired when the form is reset.<br /> Arguments: <br /> props: `Object` — Props of The form component <br /> newValues: `Object` — The reset value <br /> defaultHandler: `Func` - Default handler                                         |
 
 If the form has been decorated by `createForm` then it owns APIs as follows:
 
@@ -142,21 +144,21 @@ If the form has been decorated by `createForm` then it owns APIs as follows:
 | isValid      | bool | Whether the form is valid (has no validation error).                                                                                                                                                   |
 | isPristine   | bool | Whether the current values of form are different from the initial values.                                                                                                                              |
 | isValidating | bool | Whether the form is validating.                                                                                                                                                                        |
-| initialize   | func | Resets the form to specified values.                                                                                                                                                                   |
-| submit       | func | Submits the form. Returns a promise that will be resolved when the form is submitted successfully, or rejected if the submission fails.<br /> Arguments: <br /> onSuccess: `func`<br /> onFail: `func` |
-| updateValues | func | Updates values of the form. <br /> Arguments: <br /> newValues: `object`                                                                                                                               |
-| updateSchema | func | Updates schema of the form. <br /> Arguments: <br /> newSchema: `object`                                                                                                                               |
-| validateAll  | func | Validates the form.                                                                                                                                                                                    |
-| validateItem | func | Validates the specified field. <br /> Arguments: <br /> name: `string` - Name of the field to validate <br />                                                                                          |
+| initialize   | Func | Resets the form to specified values.                                                                                                                                                                   |
+| submit       | Func | Submits the form. Returns a promise that will be resolved when the form is submitted successfully, or rejected if the submission fails.<br /> Arguments: <br /> onSuccess: `Func`<br /> onFail: `Func` |
+| updateValues | Func | Updates values of the form. <br /> Arguments: <br /> newValues: `Object`                                                                                                                               |
+| updateSchema | Func | Updates schema of the form. <br /> Arguments: <br /> newSchema: `Object`                                                                                                                               |
+| validateAll  | Func | Validates the form.                                                                                                                                                                                    |
+| validateItem | Func | Validates the specified field. <br /> Arguments: <br /> name: `string` - Name of the field to validate <br />                                                                                          |
 
 ### ValidationField
 
 | Property        | Type   | Default value | Description                                                                                                                                                                               |
 | :-------------- | :----- | :------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| formatter       | func   |               | The andler that format the value. <br /> Arguments: <br /> value: `string \| boolean \| number` — The value of input.<br /> Returns `object` — The formatted value.                       |
+| formatter       | Func   |               | The andler that format the value. <br /> Arguments: <br /> value: `string \| boolean \| number` — The value of input.<br /> Returns `Object` — The formatted value.                       |
 | name            | string | Required      | The unique identifier of field, corresponding to a value in the form values.                                                                                                              |
-| onValidate      | func   |               | Callback fired after validation.<br /> Arguments: <br /> result: `object` — The result of validation. You can pull out the return of the validator by accessing `result.promiseValue`.    |
-| render          | func   | Required      | A render prop. Use the property to get what to render.<br /> Arguments: <br />props: `object` — Please refer to `options.fieldRender`. <br />Returns `object` — The React node to render. |
+| onValidate      | Func   |               | Callback fired after validation.<br /> Arguments: <br /> result: `Object` — The result of validation. You can pull out the return of the validator by accessing `result.promiseValue`.    |
+| render          | Func   | Required      | A render prop. Use the property to get what to render.<br /> Arguments: <br />props: `Object` — Please refer to `options.fieldRender`. <br />Returns `Object` — The React node to render. |
 | trigger         | string | onChange      | When to collect the value of children node.                                                                                                                                               |
 | validateTrigger | string | onChange      | When to validate the value of children node.                                                                                                                                              |
 | valuePropName   | string | value         | Prop that should be validated. For example, the `valuePropName` of checkbox is `checked`.                                                                                                 |
