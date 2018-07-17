@@ -75,7 +75,7 @@ class ReduxForm extends React.PureComponent {
     return (
       <form
         onSubmit={this.handleSubmit}
-        style={{ margin: '40px', maxWidth: '400px' }}>
+        style={{ margin: '20px 40px', maxWidth: '360px' }}>
         <ValidationField
           name="name"
           label="用户名"
@@ -98,13 +98,15 @@ class ReduxForm extends React.PureComponent {
           type="submit"
           variant="raised"
           color="primary"
-          style={{
-            marginLeft: '10px',
-          }}
           disabled={!isValid}>
           登录
         </Button>
-        <Button onClick={() => initialize()} color="primary">
+        <Button
+          onClick={() => initialize()}
+          style={{
+            marginLeft: '6px',
+          }}
+          color="primary">
           恢复
         </Button>
       </form>

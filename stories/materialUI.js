@@ -30,8 +30,15 @@ const rules = {
     message: 'Please input your name',
   },
   gender: {
-    validator: gender => gender,
+    validator: (gender, ...other) => {
+      console.log(other, 12);
+      return gender;
+    },
     message: 'Please choose your gender',
+  },
+  job: {
+    validator: (job, { age }) => job || !age || age < 20,
+    message: 'Please choose your job',
   },
   age: {
     validator: age => age,
@@ -86,6 +93,21 @@ Thirty
             </MenuItem>
           </Select>
         </ValidationField>
+        {values.age > 10 ? (
+          <ValidationField name="job" label="Job" isInput>
+            <Select>
+              <MenuItem value="engineer">
+Engineer
+              </MenuItem>
+              <MenuItem value="doctor">
+Doctor
+              </MenuItem>
+              <MenuItem value="Teacher">
+Teacher
+              </MenuItem>
+            </Select>
+          </ValidationField>
+        ) : null}
         <ValidationField name="gender" label="Gender">
           <RadioGroup row>
             <FormControlLabel value="male" control={<Radio />} label="Male" />

@@ -146,8 +146,9 @@ export default (
           [name]: true,
         },
       }));
+      const target = Object.assign({}, values, value != null ? { [name]: value } : {});
       const validation = this.validator.validateItem(
-        Object.assign({}, values, value != null ? { [name]: value } : {}),
+        target,
         name,
         errors => {
           this.setState(state => ({
@@ -161,6 +162,7 @@ export default (
             },
           }));
         },
+        target,
         values,
         ...other,
       );
