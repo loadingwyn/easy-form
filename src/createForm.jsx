@@ -12,7 +12,7 @@ export default (
   /**
    * Validation rules.
    */
-  schema = {},
+  defaultSchema = {},
   /**
    * Form options.
    */
@@ -20,6 +20,7 @@ export default (
 ) => ComposedComponent => class extends Component {
     static defaultProps = {
       values: defaultValues,
+      schema: defaultSchema,
     };
 
     static propTypes = {
@@ -27,6 +28,7 @@ export default (
        * The values of the form.
        */
       values: PropTypes.object,
+      schema: PropTypes.object,
       /**
        * Handler while value of any field is changed
        * @param {object} changedValue The value of the changed input.
@@ -41,7 +43,7 @@ export default (
 
     constructor(props, context) {
       super(props, context);
-      const { values } = props;
+      const { values, schema } = props;
       this.originalData = values;
       this.schema = schema;
       this.state = {
@@ -56,13 +58,21 @@ export default (
     static getDerivedStateFromProps(nextProps, prevState) {
       const { values } = nextProps;
       const nextState = {};
-      if (nextProps.values !== prevState.lastValues) {
+      if (values !== prevState.lastValues) {
         Object.assign(nextState, {
           values,
           lastValues: nextProps.values,
         });
       }
       return nextState;
+    }
+
+    componentDidUpdate(prevProps) {
+      const { schema } = this.props;
+      if (schema !== prevProps.schema) {
+        this.validator = new Validator(schema, options);
+        this.schema = schema;
+      }
     }
 
     getFieldValue = (value = {}) => {
@@ -146,7 +156,11 @@ export default (
           [name]: true,
         },
       }));
-      const target = Object.assign({}, values, value != null ? { [name]: value } : {});
+      const target = Object.assign(
+        {},
+        values,
+        value != null ? { [name]: value } : {},
+      );
       const validation = this.validator.validateItem(
         target,
         name,
