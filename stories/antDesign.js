@@ -45,7 +45,7 @@ class AntdForm extends React.PureComponent {
         <ValidationField name="password" label="密码" validateTrigger="onBlur">
           <Input placeholder="Password" type="password" />
         </ValidationField>
-        <FormItem wrapperCol={{ span: 12, offset: 5 }}>
+        <FormItem wrapperCol={{ span: 12, offset: 2 }}>
           <Button
             loading={isSubmitting}
             htmlType="submit"
@@ -72,11 +72,11 @@ class AntdForm extends React.PureComponent {
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 5 },
+    sm: { span: 2 },
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 6 },
+    sm: { span: 8 },
   },
 };
 

@@ -11,6 +11,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Switch from '@material-ui/core/Switch';
@@ -67,82 +70,75 @@ class MaterialUIForm extends React.PureComponent {
       initialize,
     } = this.props;
     return (
-      <form
-        onSubmit={this.handleSubmit}
-        style={{ margin: '40px', maxWidth: '400px' }}>
-        <ValidationField
-          name="name"
-          label="Name"
-          validateTrigger="onBlur"
-          isInput>
-          <Input />
-        </ValidationField>
-        <ValidationField name="age" label="Age" isInput>
-          <Select>
-            <MenuItem value="">
-None
-            </MenuItem>
-            <MenuItem value={10}>
-Ten
-            </MenuItem>
-            <MenuItem value={20}>
-Twent
-            </MenuItem>
-            <MenuItem value={30}>
-Thirty
-            </MenuItem>
-          </Select>
-        </ValidationField>
-        {values.age > 10 ? (
-          <ValidationField name="job" label="Job" isInput>
+      <Paper style={{ width: '500px', padding: '40px', margin: '20px' }}>
+        <Typography variant="headline">Sign Up</Typography>
+        <form onSubmit={this.handleSubmit}>
+          <ValidationField
+            name="name"
+            label="Name"
+            // validateTrigger="onBlur"
+            isInput>
+            <Input />
+          </ValidationField>
+          <ValidationField name="age" label="Age" isInput>
             <Select>
-              <MenuItem value="engineer">
-Engineer
-              </MenuItem>
-              <MenuItem value="doctor">
-Doctor
-              </MenuItem>
-              <MenuItem value="Teacher">
-Teacher
-              </MenuItem>
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twent</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
             </Select>
           </ValidationField>
-        ) : null}
-        <ValidationField name="gender" label="Gender">
-          <RadioGroup row>
-            <FormControlLabel value="male" control={<Radio />} label="Male" />
+          {values.age > 10 ? (
+            <ValidationField name="job" label="Job" isInput>
+              <Select>
+                <MenuItem value="engineer">Engineer</MenuItem>
+                <MenuItem value="doctor">Doctor</MenuItem>
+                <MenuItem value="Teacher">Teacher</MenuItem>
+              </Select>
+            </ValidationField>
+          ) : null}
+          <ValidationField
+            name="gender"
+            label="Gender"
+            options="custom options">
+            <RadioGroup row>
+              <FormControlLabel value="male" control={<Radio />} label="Male" />
+              <FormControlLabel
+                value="female"
+                control={<Radio />}
+                label="Female" />
+              <FormControlLabel
+                value="other"
+                control={<Radio />}
+                label="Other" />
+            </RadioGroup>
+          </ValidationField>
+          <ValidationField name="birth" label="Date of birth">
+            <Input label="Birthday" type="date" />
+          </ValidationField>
+          <ValidationField name="terms" valuePropName="checked">
             <FormControlLabel
-              value="female"
-              control={<Radio />}
-              label="Female" />
-            <FormControlLabel value="other" control={<Radio />} label="Other" />
-          </RadioGroup>
-        </ValidationField>
-        <ValidationField name="birth" label="Date of birth">
-          <Input label="Birthday" type="date" />
-        </ValidationField>
-        <ValidationField name="terms" valuePropName="checked">
-          <FormControlLabel
-            value="terms"
-            control={<Switch value="terms" />}
-            label="I agree to terms" />
-        </ValidationField>
-        <Button
-          type="submit"
-          variant="raised"
-          color="primary"
-          disabled={!isValid || isSubmitting || !values.terms || isPristine}>
-          Login
-        </Button>
-        <Button onClick={initialize} color="primary">
-          Reset
-        </Button>
-        <Button
-          color="primary"
-          onClick={() => updateFieldValue('gender', 'male', true)}>
-          Set
-        </Button>
-      </form>
+              value="terms"
+              control={<Switch value="terms" />}
+              label="I agree to terms" />
+          </ValidationField>
+          <Button
+            type="submit"
+            variant="raised"
+            color="primary"
+            disabled={!isValid || isSubmitting || !values.terms || isPristine}>
+            Next
+          </Button>
+          <Button onClick={initialize} color="primary">
+            Reset
+          </Button>
+          <Button
+            color="primary"
+            onClick={() => updateFieldValue('gender', 'male', true)}>
+            Set
+          </Button>
+        </form>
+      </Paper>
     );
   }
 }
@@ -158,13 +154,9 @@ function fieldRender({
   isInput,
 }) {
   const labelNode = isInput ? (
-    <InputLabel htmlFor={id}>
-      {label}
-    </InputLabel>
+    <InputLabel htmlFor={id}>{label}</InputLabel>
   ) : (
-    <FormLabel htmlFor={id}>
-      {label}
-    </FormLabel>
+    <FormLabel htmlFor={id}>{label}</FormLabel>
   );
   const input = cloneElement(
     children,
@@ -195,9 +187,7 @@ function fieldRender({
       required={required}>
       {labelNode}
       {input}
-      <FormHelperText>
-        {error ? error[0] : ''}
-      </FormHelperText>
+      <FormHelperText>{error ? error[0] : ''}</FormHelperText>
     </FormControl>
   );
 }

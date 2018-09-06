@@ -7,7 +7,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-// import FormLabel from '@material-ui/core/FormLabel';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { ValidationField, createForm } from '../src';
@@ -73,43 +74,47 @@ class ReduxForm extends React.PureComponent {
   render() {
     const { isValid, initialize } = this.props;
     return (
-      <form
-        onSubmit={this.handleSubmit}
-        style={{ margin: '20px 40px', maxWidth: '360px' }}>
-        <ValidationField
-          name="name"
-          label="用户名"
-          // formatter={value => ({
-          //   name: value,
-          //   password: value,
-          // })}
-          validateTrigger="onBlur">
-          <Input placeholder="Username" />
-        </ValidationField>
-        <ValidationField
-          name="password"
-          label="密码"
-          // trigger="onBlur"
-          // valuePropName="defaultValue"
-          validateTrigger="onBlur">
-          <Input placeholder="Password" type="password" />
-        </ValidationField>
-        <Button
-          type="submit"
-          variant="raised"
-          color="primary"
-          disabled={!isValid}>
-          登录
-        </Button>
-        <Button
-          onClick={() => initialize()}
-          style={{
-            marginLeft: '6px',
-          }}
-          color="primary">
-          恢复
-        </Button>
-      </form>
+      <Paper style={{ width: '400px', padding: '40px', margin: '20px' }}>
+        <Typography variant="headline">登录</Typography>
+        <form onSubmit={this.handleSubmit}>
+          <ValidationField
+            name="name"
+            label="用户名"
+            // formatter={value => ({
+            //   name: value,
+            //   password: value,
+            // })}
+            validateTrigger="onBlur">
+            <Input placeholder="Username" />
+          </ValidationField>
+          <ValidationField
+            name="password"
+            label="密码"
+            // trigger="onBlur"
+            // valuePropName="defaultValue"
+            validateTrigger="onBlur">
+            <Input placeholder="Password" type="password" />
+          </ValidationField>
+          <Button
+            type="submit"
+            variant="raised"
+            color="primary"
+            style={{
+              padding: '8px 24px',
+            }}
+            disabled={!isValid}>
+            登录
+          </Button>
+          <Button
+            onClick={() => initialize()}
+            style={{
+              marginLeft: '6px',
+            }}
+            color="primary">
+            恢复
+          </Button>
+        </form>
+      </Paper>
     );
   }
 }
@@ -124,11 +129,7 @@ function fieldRender({
   dataBindProps,
   isInput,
 }) {
-  const labelNode = (
-    <InputLabel htmlFor={id}>
-      {label}
-    </InputLabel>
-  );
+  const labelNode = <InputLabel htmlFor={id}>{label}</InputLabel>;
   const input = cloneElement(
     children,
     Object.assign(
@@ -158,9 +159,7 @@ function fieldRender({
       required={required}>
       {labelNode}
       {input}
-      <FormHelperText>
-        {error ? error[0] : ''}
-      </FormHelperText>
+      <FormHelperText>{error ? error[0] : ''}</FormHelperText>
     </FormControl>
   );
 }
@@ -189,9 +188,5 @@ const Demo = connect(
 );
 
 storiesOf('Form with Material-ui', module)
-  .addDecorator(story => (
-    <Provider store={store}>
-      {story()}
-    </Provider>
-  ))
+  .addDecorator(story => <Provider store={store}>{story()}</Provider>)
   .add('login with redux', () => <Demo />);

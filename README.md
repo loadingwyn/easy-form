@@ -124,7 +124,7 @@ Default values of the form.
 
 #### schema: `Object<[field: string]: Validator>`
 
-`validator: (target: any, values: Object, preValues: Object, props: Object) => bool | Promise`
+`validator: (target: any, values: Object, preValues: Object, customOptions: Object) => bool | Promise`
 
 The validation rules of the form. You pass an array to customize more than one validators. And the validators will be executed sequentially.
 If validation passes, it should return `true` or a resolved promise. Else, it should return `false` or a rejected promise. The message should be a string or a function that receives value of input and result of validation and returns a string.
@@ -158,6 +158,7 @@ If the form has been decorated by `createForm` then it owns APIs as follows:
 | formatter       | Func   |               | The andler that format the value. <br /> Arguments: <br /> value: `string \| boolean \| number` — The value of input.<br /> Returns `Object` — The formatted value.                       |
 | name            | string | Required      | The unique identifier of field, corresponding to a value in the form values.                                                                                                              |
 | onValidate      | Func   |               | Callback fired after validation.<br /> Arguments: <br /> result: `Object` — The result of validation. You can pull out the return of the validator by accessing `result.promiseValue`.    |
+| options         | Object |               | Additional options that can be passed to the validator function.                                                                                                                          |
 | render          | Func   | Required      | A render prop. Use the property to get what to render.<br /> Arguments: <br />props: `Object` — Please refer to `options.fieldRender`. <br />Returns `Object` — The React node to render. |
 | trigger         | string | onChange      | When to collect the value of children node.                                                                                                                                               |
 | validateTrigger | string | onChange      | When to validate the value of children node.                                                                                                                                              |

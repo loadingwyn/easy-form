@@ -11,11 +11,20 @@ function fieldRender({
   label,
   dataBindProps,
 }) {
+  /* eslint-disable */
+  if (React.Children.only(children)) {
+    console.warn(
+      'Field expects the component to be passed as a child OR component. Both have been passed and child is being used.',
+    );
+  } else if (!React.Children.only(children) && !children) {
+    console.warn(
+      'Field must have one valid child which is a field component. E.g FieldText, Select',
+    );
+  }
   const input = cloneElement(children, {
     id,
     ...dataBindProps,
   });
-  /* eslint-disable */
   return (
     <div className="easy-form-field">
       <label htmlFor={id} className="easy-form-label">

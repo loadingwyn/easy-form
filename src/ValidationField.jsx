@@ -55,17 +55,31 @@ class Field extends Component {
     defaultValue: '',
   };
 
-  componentDidMount() {
-    const { subscribe, name } = this.props;
-    if (subscribe) {
-      subscribe(name, this.handleValidate);
+  constructor(props) {
+    super(props);
+    const { register, name } = props;
+    if (!register) {
+      throw new Error(
+        'Field must be inside a component decorated with createForm()',
+      );
+    }
+    if (register) {
+      register(name, this.handleValidate);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { name, register, unRegister } = this.props;
+    if (name !== prevProps.name) {
+      unRegister(prevProps.name);
+      register(name, this.handleValidate);
     }
   }
 
   componentWillUnmount() {
-    const { unSubscribe, name } = this.props;
-    if (unSubscribe) {
-      unSubscribe(name);
+    const { unRegister, name } = this.props;
+    if (unRegister) {
+      unRegister(name);
     }
   }
 
@@ -103,11 +117,12 @@ class Field extends Component {
       validateItem,
       validateTrigger,
       onValidate,
+      options,
       [validateTrigger]: onTrigger,
     } = this.props;
     const formattedValue = this.format(e, value, name);
     onFieldChange(formattedValue);
-    const result = validateItem(name, formattedValue[name], this.props);
+    const result = validateItem(name, formattedValue[name], options);
     if (result) result.then(onValidate, onValidate);
     if (onTrigger) {
       onTrigger(e, value, ...args);

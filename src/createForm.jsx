@@ -113,6 +113,20 @@ export default (
       }));
     };
 
+    updateErrors = newErrors => {
+      this.setState({
+        errors: newErrors,
+      });
+    };
+
+    updateFieldError = (name, newError) => {
+      this.setState(state => ({
+        errors: Object.assign({}, state.values, {
+          [name]: newError,
+        }),
+      }));
+    };
+
     updateValues = newValues => {
       this.setState({
         values: newValues,
@@ -135,11 +149,11 @@ export default (
       }
     };
 
-    subscribe = (name, fieldValidator) => {
+    register = (name, fieldValidator) => {
       this.fieldValidators[name] = fieldValidator;
     };
 
-    unSubscribe = name => {
+    unRegister = name => {
       this.fieldValidators[name] = null;
     };
 
@@ -236,12 +250,14 @@ export default (
             onFieldChange: this.handleFieldChange,
             validateItem: this.validateItem,
             render: options.fieldRender || render,
-            subscribe: this.subscribe,
-            unSubscribe: this.unSubscribe,
+            register: this.register,
+            unRegister: this.unRegister,
           }}>
           <ComposedComponent
             {...other}
             {...this.state}
+            updateFieldError={this.updateFieldError}
+            updateErrors={this.updateErrors}
             updateFieldValue={this.updateFieldValue}
             updateValues={this.updateValues}
             updateSchema={this.updateSchema}
