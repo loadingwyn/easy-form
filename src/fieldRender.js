@@ -4,26 +4,17 @@ import LoadingIcon from './icons/Loading';
 import './style.css';
 
 function fieldRender({
-  children,
-  id,
-  error,
-  validating,
-  label,
-  dataBindProps,
+  children, id, error, validating, label, dataBind,
 }) {
   /* eslint-disable */
-  if (React.Children.only(children)) {
+  if (!React.Children.only(children) && !children) {
     console.warn(
-      'Field expects the component to be passed as a child OR component. Both have been passed and child is being used.',
-    );
-  } else if (!React.Children.only(children) && !children) {
-    console.warn(
-      'Field must have one valid child which is a field component. E.g FieldText, Select',
+      'Field must have one valid child which is a field component. E.g input, Select',
     );
   }
   const input = cloneElement(children, {
     id,
-    ...dataBindProps,
+    ...dataBind,
   });
   return (
     <div className="easy-form-field">
@@ -49,7 +40,7 @@ fieldRender.propTypes = {
   error: PropTypes.string,
   label: PropTypes.string,
   validating: PropTypes.bool,
-  dataBindProps: PropTypes.object,
+  dataBind: PropTypes.object,
 };
 
 fieldRender.defaultProps = {
@@ -57,7 +48,7 @@ fieldRender.defaultProps = {
   error: '',
   label: '',
   validating: false,
-  dataBindProps: {},
+  dataBind: {},
 };
 
 export default fieldRender;

@@ -83,15 +83,18 @@ class Field extends Component {
     }
   }
 
-  getValueFromEvent(e, value) {
+  getValueFromEvent(e, value, ...other) {
     let newValue;
-    const { valuePropName } = this.props;
+    const { valuePropName, getValueFromEvent } = this.props;
+    if (getValueFromEvent) {
+      return getValueFromEvent(e, value, ...other);
+    }
     if (!e.preventDefault) {
       newValue = e;
-    } else if (value != null) {
-      newValue = value;
     } else if (e.target[valuePropName] != null) {
       newValue = e.target[valuePropName];
+    } else if (value != null) {
+      newValue = value;
     } else {
       newValue = e.target.value;
     }
@@ -122,7 +125,12 @@ class Field extends Component {
     } = this.props;
     const formattedValue = this.format(e, value, name);
     onFieldChange(formattedValue);
-    const result = validateItem(name, formattedValue[name], options);
+    const result = validateItem(
+      name,
+      formattedValue[name],
+      options,
+      this.props,
+    );
     if (result) result.then(onValidate, onValidate);
     if (onTrigger) {
       onTrigger(e, value, ...args);
@@ -148,12 +156,14 @@ class Field extends Component {
 
   handleValidate = (e, value) => {
     let result;
-    const { name, validateItem, onValidate } = this.props;
+    const {
+      name, validateItem, onValidate, options,
+    } = this.props;
     if (!e) {
       result = validateItem(name, null, this.props);
     } else {
       const formattedValue = this.format(e, value, name);
-      result = validateItem(name, formattedValue[name], this.props);
+      result = validateItem(name, formattedValue[name], options, this.props);
     }
     if (result) result.then(onValidate, onValidate);
     return result;
@@ -172,12 +182,12 @@ class Field extends Component {
       trigger,
       ...other
     } = this.props;
-    const dataBindProps = {
+    const dataBind = {
       [valuePropName]: values[name] || defaultValue,
       [trigger]: this.handleValueChange,
     };
     if (validateTrigger !== 'ignore') {
-      dataBindProps[validateTrigger] = validateTrigger === trigger
+      dataBind[validateTrigger] = validateTrigger === trigger
         ? this.handleChangeAndValidate
         : this.handleValidate;
     }
@@ -193,7 +203,7 @@ class Field extends Component {
       ...other,
       id: `easy-form-${name}`,
       name,
-      dataBindProps,
+      dataBind,
       trigger,
       status,
       onValidate: this.handleValidate,

@@ -52,7 +52,7 @@ export default (
         validatings: {},
         isSubmitting: false,
       };
-      this.validator = new Validator(schema, options);
+      this.validator = new Validator(schema, options.validationOption);
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -70,7 +70,7 @@ export default (
     componentDidUpdate(prevProps) {
       const { schema } = this.props;
       if (schema !== prevProps.schema) {
-        this.validator = new Validator(schema, options);
+        this.validator = new Validator(schema, options.validationOption);
         this.schema = schema;
       }
     }
@@ -121,7 +121,7 @@ export default (
 
     updateFieldError = (name, newError) => {
       this.setState(state => ({
-        errors: Object.assign({}, state.values, {
+        errors: Object.assign({}, state.errors, {
           [name]: newError,
         }),
       }));
@@ -239,6 +239,7 @@ export default (
     };
 
     render() {
+      const { getValueFromEvent, fieldRender } = options;
       const { onFormChange, onChange, ...other } = this.props;
       const { validatings, errors } = this.state;
       const isValidating = Object.values(validatings).filter(msg => msg).length > 0;
@@ -247,9 +248,10 @@ export default (
         <FormContext.Provider
           value={{
             ...this.state,
+            getValueFromEvent,
             onFieldChange: this.handleFieldChange,
             validateItem: this.validateItem,
-            render: options.fieldRender || render,
+            render: fieldRender || render,
             register: this.register,
             unRegister: this.unRegister,
           }}>

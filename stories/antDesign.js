@@ -81,11 +81,11 @@ const formItemLayout = {
 };
 
 function fieldRender({
-  children, id, error, status, label, dataBindProps,
+  children, id, error, status, label, dataBind,
 }) {
   const input = cloneElement(children, {
     id,
-    ...dataBindProps,
+    ...dataBind,
   });
   return (
     <FormItem

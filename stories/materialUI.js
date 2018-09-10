@@ -28,15 +28,12 @@ const rules = {
         } else {
           rej(name);
         }
-      }, 2000);
+      }, 1000);
     }),
     message: 'Please input your name',
   },
   gender: {
-    validator: (gender, ...other) => {
-      console.log(other, 12);
-      return gender;
-    },
+    validator: gender => gender,
     message: 'Please choose your gender',
   },
   job: {
@@ -84,7 +81,7 @@ class MaterialUIForm extends React.PureComponent {
             <Select>
               <MenuItem value="">None</MenuItem>
               <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twent</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
           </ValidationField>
@@ -150,7 +147,7 @@ function fieldRender({
   required,
   validating,
   label,
-  dataBindProps,
+  dataBind,
   isInput,
 }) {
   const labelNode = isInput ? (
@@ -163,7 +160,7 @@ function fieldRender({
     Object.assign(
       {
         id,
-        ...dataBindProps,
+        ...dataBind,
       },
       isInput
         ? {

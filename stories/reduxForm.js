@@ -126,7 +126,7 @@ function fieldRender({
   required,
   validating,
   label,
-  dataBindProps,
+  dataBind,
   isInput,
 }) {
   const labelNode = <InputLabel htmlFor={id}>{label}</InputLabel>;
@@ -135,7 +135,7 @@ function fieldRender({
     Object.assign(
       {
         id,
-        ...dataBindProps,
+        ...dataBind,
         error: error && error.length > 0,
       },
       isInput
