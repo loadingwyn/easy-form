@@ -17,7 +17,8 @@ export default (
    * Form options.
    */
   options = {},
-) => ComposedComponent => class extends Component {
+) => ComposedComponent => {
+  class Form extends Component {
     static defaultProps = {
       values: defaultValues,
       schema: defaultSchema,
@@ -44,14 +45,23 @@ export default (
     constructor(props, context) {
       super(props, context);
       const { values, schema } = props;
-      this.originalData = values;
-      this.schema = schema;
+      const { getValueFromEvent, fieldRender } = options;
       this.state = {
         values: this.originalData,
         errors: {},
         validatings: {},
         isSubmitting: false,
+        /* eslint-disable */
+        getValueFromEvent,
+        onFieldChange: this.handleFieldChange,
+        validateItem: this.validateItem,
+        render: fieldRender || render,
+        register: this.register,
+        unRegister: this.unRegister,
+        /* eslint-enble */
       };
+      this.originalData = values;
+      this.schema = schema;
       this.validator = new Validator(schema, options.validationOption);
     }
 
@@ -197,13 +207,15 @@ export default (
       return validation;
     };
 
-    validateAll = () => Promise.all(
-      Object.keys(this.schema).map(
-        fieldName => (this.fieldValidators[fieldName]
-          ? this.fieldValidators[fieldName]()
-          : this.validateItem(fieldName)),
-      ),
-    );
+    validateAll = () =>
+      Promise.all(
+        Object.keys(this.schema).map(
+          fieldName =>
+            this.fieldValidators[fieldName]
+              ? this.fieldValidators[fieldName]()
+              : this.validateItem(fieldName),
+        ),
+      );
 
     submit = (onSubmitSuccess, onSubmitFail) => () => {
       this.setState({
@@ -239,25 +251,21 @@ export default (
     };
 
     render() {
-      const { getValueFromEvent, fieldRender } = options;
-      const { onFormChange, onChange, ...other } = this.props;
-      const { validatings, errors } = this.state;
-      const isValidating = Object.values(validatings).filter(msg => msg).length > 0;
-      const isValid = Object.values(errors).filter(msg => msg && msg.length > 0).length <= 0;
+      const { onFormChange, onChange, forwardedRef, ...other } = this.props;
+      const { validatings, errors, values, isSubmitting } = this.state;
+      const isValidating =
+        Object.values(validatings).filter(msg => msg).length > 0;
+      const isValid =
+        Object.values(errors).filter(msg => msg && msg.length > 0).length <= 0;
       return (
-        <FormContext.Provider
-          value={{
-            ...this.state,
-            getValueFromEvent,
-            onFieldChange: this.handleFieldChange,
-            validateItem: this.validateItem,
-            render: fieldRender || render,
-            register: this.register,
-            unRegister: this.unRegister,
-          }}>
+        <FormContext.Provider value={this.state}>
           <ComposedComponent
             {...other}
-            {...this.state}
+            ref={forwardedRef}
+            validatings={validatings}
+            errors={errors}
+            values={values}
+            isSubmitting={isSubmitting}
             updateFieldError={this.updateFieldError}
             updateErrors={this.updateErrors}
             updateFieldValue={this.updateFieldValue}
@@ -269,8 +277,18 @@ export default (
             validateItem={this.validateItem}
             initialize={this.initialize}
             submit={this.submit}
-            isPristine={this.isPristine} />
+            isPristine={this.isPristine}
+          />
         </FormContext.Provider>
       );
     }
+  }
+
+  function forwardRef(props, ref) {
+    return <Form {...props} forwardedRef={ref} />;
+  }
+  // Give this component a more helpful display name in DevTools.
+  const name = Component.displayName || Component.name;
+  forwardRef.displayName = `EasyForm(${name})`;
+  return React.forwardRef(forwardRef);
 };

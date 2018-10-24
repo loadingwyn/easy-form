@@ -97,7 +97,7 @@ class ReduxForm extends React.PureComponent {
           </ValidationField>
           <Button
             type="submit"
-            variant="raised"
+            variant="contained"
             color="primary"
             style={{
               padding: '8px 24px',
@@ -164,6 +164,16 @@ function fieldRender({
   );
 }
 
+const WrappedForm = createForm({}, rules, {
+  fieldRender,
+  onFormChange: ({ update }, value) => {
+    update(value);
+  },
+  onFormReset: ({ reset }, value) => {
+    reset(value);
+  },
+})(ReduxForm);
+
 const Demo = connect(
   state => ({
     values: state.formData,
@@ -175,17 +185,7 @@ const Demo = connect(
     },
     dispatch,
   ),
-)(
-  createForm({}, rules, {
-    fieldRender,
-    onFormChange: ({ update }, value) => {
-      update(value);
-    },
-    onFormReset: ({ reset }, value) => {
-      reset(value);
-    },
-  })(ReduxForm),
-);
+)(props => <WrappedForm {...props} />); // react-redux does not support rorwarding fefs.
 
 storiesOf('Form with Material-ui', module)
   .addDecorator(story => <Provider store={store}>{story()}</Provider>)

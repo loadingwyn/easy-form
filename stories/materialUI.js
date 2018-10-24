@@ -121,7 +121,7 @@ class MaterialUIForm extends React.PureComponent {
           </ValidationField>
           <Button
             type="submit"
-            variant="raised"
+            variant="contained"
             color="primary"
             disabled={!isValid || isSubmitting || !values.terms || isPristine}>
             Next

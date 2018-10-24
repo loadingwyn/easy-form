@@ -89,7 +89,7 @@ class Field extends Component {
     if (getValueFromEvent) {
       return getValueFromEvent(e, value, ...other);
     }
-    if (!e.preventDefault) {
+    if (!e.target || !e.preventDefault) {
       newValue = e;
     } else if (e.target[valuePropName] != null) {
       newValue = e.target[valuePropName];
@@ -111,15 +111,13 @@ class Field extends Component {
   }
 
   handleChangeAndValidate = (e, value, ...args) => {
-    if (!e) {
-      return;
-    }
     const {
       name,
       onFieldChange,
       validateItem,
       validateTrigger,
-      onValidate,
+      onValidateSuccess,
+      onValidateFail,
       options,
       [validateTrigger]: onTrigger,
     } = this.props;
@@ -131,16 +129,14 @@ class Field extends Component {
       options,
       this.props,
     );
-    if (result) result.then(onValidate, onValidate);
+    if (result) result.then(onValidateSuccess, onValidateFail);
     if (onTrigger) {
       onTrigger(e, value, ...args);
     }
+    return result;
   };
 
   handleValueChange = (e, value, ...args) => {
-    if (!e) {
-      return;
-    }
     const {
       name,
       onFieldChange,
@@ -157,7 +153,11 @@ class Field extends Component {
   handleValidate = (e, value) => {
     let result;
     const {
-      name, validateItem, onValidate, options,
+      name,
+      validateItem,
+      onValidateSuccess,
+      onValidateFail,
+      options,
     } = this.props;
     if (!e) {
       result = validateItem(name, null, this.props);
@@ -165,7 +165,7 @@ class Field extends Component {
       const formattedValue = this.format(e, value, name);
       result = validateItem(name, formattedValue[name], options, this.props);
     }
-    if (result) result.then(onValidate, onValidate);
+    if (result) result.then(onValidateSuccess, onValidateFail);
     return result;
   };
 
