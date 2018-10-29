@@ -68,13 +68,9 @@ class MaterialUIForm extends React.PureComponent {
     } = this.props;
     return (
       <Paper style={{ width: '500px', padding: '40px', margin: '20px' }}>
-        <Typography variant="headline">Sign Up</Typography>
+        <Typography variant="h5">Sign Up</Typography>
         <form onSubmit={this.handleSubmit}>
-          <ValidationField
-            name="name"
-            label="Name"
-            // validateTrigger="onBlur"
-            isInput>
+          <ValidationField name="name" label="Name" isInput>
             <Input />
           </ValidationField>
           <ValidationField name="age" label="Age" isInput>
@@ -147,7 +143,7 @@ function fieldRender({
   required,
   validating,
   label,
-  dataBind,
+  dataBindProps,
   isInput,
 }) {
   const labelNode = isInput ? (
@@ -160,7 +156,7 @@ function fieldRender({
     Object.assign(
       {
         id,
-        ...dataBind,
+        ...dataBindProps,
       },
       isInput
         ? {

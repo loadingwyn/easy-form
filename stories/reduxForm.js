@@ -75,7 +75,7 @@ class ReduxForm extends React.PureComponent {
     const { isValid, initialize } = this.props;
     return (
       <Paper style={{ width: '400px', padding: '40px', margin: '20px' }}>
-        <Typography variant="headline">登录</Typography>
+        <Typography variant="h5">登录</Typography>
         <form onSubmit={this.handleSubmit}>
           <ValidationField
             name="name"
@@ -126,7 +126,7 @@ function fieldRender({
   required,
   validating,
   label,
-  dataBind,
+  dataBindProps,
   isInput,
 }) {
   const labelNode = <InputLabel htmlFor={id}>{label}</InputLabel>;
@@ -135,7 +135,7 @@ function fieldRender({
     Object.assign(
       {
         id,
-        ...dataBind,
+        ...dataBindProps,
         error: error && error.length > 0,
       },
       isInput

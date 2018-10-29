@@ -35,7 +35,7 @@ class LoginForm extends React.PureComponent {
         <ValidationField
           name="name"
           label="Username"
-          onValidate={(...params) => console.log(...params)}>
+          onValidateSuccess={(...params) => console.log(...params)}>
           <input placeholder="Username" />
         </ValidationField>
         <ValidationField name="password" label="Password">

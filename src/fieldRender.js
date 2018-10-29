@@ -4,7 +4,7 @@ import LoadingIcon from './icons/Loading';
 import './style.css';
 
 function fieldRender({
-  children, id, error, validating, label, dataBind,
+  children, id, error, validating, label, dataBindProps,
 }) {
   /* eslint-disable */
   if (!React.Children.only(children) && !children) {
@@ -14,7 +14,7 @@ function fieldRender({
   }
   const input = cloneElement(children, {
     id,
-    ...dataBind,
+    ...dataBindProps,
   });
   return (
     <div className="easy-form-field">
@@ -40,7 +40,7 @@ fieldRender.propTypes = {
   error: PropTypes.string,
   label: PropTypes.string,
   validating: PropTypes.bool,
-  dataBind: PropTypes.object,
+  dataBindProps: PropTypes.object,
 };
 
 fieldRender.defaultProps = {
@@ -48,7 +48,7 @@ fieldRender.defaultProps = {
   error: '',
   label: '',
   validating: false,
-  dataBind: {},
+  dataBindProps: {},
 };
 
 export default fieldRender;

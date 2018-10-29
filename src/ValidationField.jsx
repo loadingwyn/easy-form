@@ -116,8 +116,7 @@ class Field extends Component {
       onFieldChange,
       validateItem,
       validateTrigger,
-      onValidateSuccess,
-      onValidateFail,
+      onValidate,
       options,
       [validateTrigger]: onTrigger,
     } = this.props;
@@ -129,7 +128,7 @@ class Field extends Component {
       options,
       this.props,
     );
-    if (result) result.then(onValidateSuccess, onValidateFail);
+    if (result) result.then(onValidate, onValidate);
     if (onTrigger) {
       onTrigger(e, value, ...args);
     }
@@ -155,8 +154,7 @@ class Field extends Component {
     const {
       name,
       validateItem,
-      onValidateSuccess,
-      onValidateFail,
+      onValidate,
       options,
     } = this.props;
     if (!e) {
@@ -165,7 +163,7 @@ class Field extends Component {
       const formattedValue = this.format(e, value, name);
       result = validateItem(name, formattedValue[name], options, this.props);
     }
-    if (result) result.then(onValidateSuccess, onValidateFail);
+    if (result) result.then(onValidate, onValidate);
     return result;
   };
 
@@ -182,12 +180,12 @@ class Field extends Component {
       trigger,
       ...other
     } = this.props;
-    const dataBind = {
+    const dataBindProps = {
       [valuePropName]: values[name] || defaultValue,
       [trigger]: this.handleValueChange,
     };
     if (validateTrigger !== 'ignore') {
-      dataBind[validateTrigger] = validateTrigger === trigger
+      dataBindProps[validateTrigger] = validateTrigger === trigger
         ? this.handleChangeAndValidate
         : this.handleValidate;
     }
@@ -203,7 +201,7 @@ class Field extends Component {
       ...other,
       id: `easy-form-${name}`,
       name,
-      dataBind,
+      dataBindProps,
       trigger,
       status,
       onValidate: this.handleValidate,

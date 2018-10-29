@@ -3,6 +3,7 @@ node_modules/
 .idea
 .npm
 .pid
+.cache
 configs/*
 !src/configs/
 tools/*
