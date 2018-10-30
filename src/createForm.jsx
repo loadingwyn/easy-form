@@ -288,7 +288,7 @@ export default (
     return <Form {...props} forwardedRef={ref} />;
   }
   // Give this component a more helpful display name in DevTools.
-  const name = Component.displayName || Component.name;
+  const name = ComposedComponent.displayName || ComposedComponent.name;
   forwardRef.displayName = `EasyForm(${name})`;
   return React.forwardRef(forwardRef);
 };

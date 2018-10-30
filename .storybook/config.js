@@ -1,4 +1,5 @@
-import { configure } from '@storybook/react';
+import { configure, addDecorator } from '@storybook/react';
+import { withConsole } from '@storybook/addon-console';
 
 function loadStories() {
   require('../stories');
@@ -7,4 +8,5 @@ function loadStories() {
   require('../stories/antDesign');
 }
 
+addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 configure(loadStories, module);

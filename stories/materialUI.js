@@ -1,5 +1,6 @@
 import React, { cloneElement } from 'react';
 import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
@@ -54,7 +55,7 @@ class MaterialUIForm extends React.PureComponent {
   handleSubmit = e => {
     e.preventDefault();
     const { submit } = this.props;
-    submit(data => console.log(data), error => console.log(error))();
+    submit(action('submit-success'), action('submit-fail'))();
   };
 
   render() {

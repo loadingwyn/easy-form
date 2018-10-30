@@ -3,7 +3,7 @@ import React from 'react';
 const FormContext = React.createContext({});
 export default FormContext;
 export function withFormData(Component) {
-  function WrappedComponent(props) {
+  function WrappedField(props) {
     const { forwardedRef, ...other } = props;
     return (
       <FormContext.Consumer>
@@ -12,11 +12,11 @@ export function withFormData(Component) {
     );
   }
   function forwardRef(props, ref) {
-    return <WrappedComponent {...props} forwardedRef={ref} />;
+    return <WrappedField {...props} forwardedRef={ref} />;
   }
 
   // Give this component a more helpful display name in DevTools.
   const name = Component.displayName || Component.name;
-  forwardRef.displayName = `ValidationField(${name})`;
+  forwardRef.displayName = `WithFormValues(${name})`;
   return React.forwardRef(forwardRef);
 }

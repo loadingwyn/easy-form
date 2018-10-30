@@ -1,6 +1,7 @@
 import React, { cloneElement } from 'react';
 import { connect, Provider } from 'react-redux';
 import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { bindActionCreators, combineReducers, createStore } from 'redux';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -13,14 +14,14 @@ import InputLabel from '@material-ui/core/InputLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { ValidationField, createForm } from '../src';
 
-const formReducer = (state = {}, action) => {
-  if (!action.payload) {
+const formReducer = (state = {}, formAction) => {
+  if (!formAction.payload) {
     return state;
   }
-  if (action.type === 'RESET_FORM_VALUE') {
-    return action.payload || {};
+  if (formAction.type === 'RESET_FORM_VALUE') {
+    return formAction.payload || {};
   }
-  return Object.assign({}, state, action.payload);
+  return Object.assign({}, state, formAction.payload);
 };
 
 const actionCreator = payload => ({
@@ -64,7 +65,7 @@ class ReduxForm extends React.PureComponent {
   handleSubmit = e => {
     e.preventDefault();
     const { submit } = this.props;
-    submit(data => console.log(data), error => console.log(error))();
+    submit(action('submit-success'), action('submit-fail'))();
   };
 
   // handleChange = value => {

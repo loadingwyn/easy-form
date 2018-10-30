@@ -1,5 +1,6 @@
 import React, { cloneElement } from 'react';
 import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { Form, Input, Button } from 'antd';
 import 'antd/dist/antd.css';
 import { ValidationField, createForm } from '../src';
@@ -32,14 +33,18 @@ class AntdForm extends React.PureComponent {
   handleSubmit = e => {
     e.preventDefault();
     const { submit } = this.props;
-    submit(data => console.log(data), error => console.log(error))();
+    submit(action('submit-success'), action('submit-fail'))();
   };
 
   render() {
     const { isValid, isSubmitting, initialize } = this.props;
     return (
       <form onSubmit={this.handleSubmit} style={{ marginTop: 40 }}>
-        <ValidationField name="name" label="用户名" validateTrigger="onBlur">
+        <ValidationField
+          name="name"
+          label="用户名"
+          validateTrigger="onBlur"
+          onValidate={action('validate')}>
           <Input placeholder="Username" />
         </ValidationField>
         <ValidationField name="password" label="密码" validateTrigger="onBlur">
