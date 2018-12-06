@@ -209,12 +209,9 @@ export default (
 
     validateAll = () =>
       Promise.all(
-        Object.keys(this.schema).map(
-          fieldName =>
-            this.fieldValidators[fieldName]
-              ? this.fieldValidators[fieldName]()
-              : this.validateItem(fieldName),
-        ),
+        Object.keys(this.fieldValidators)
+          .filter(field => this.fieldValidators[field])
+          .map(fieldName => this.fieldValidators[fieldName]()),
       );
 
     submit = (onSubmitSuccess, onSubmitFail) => () => {
