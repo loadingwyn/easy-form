@@ -4,7 +4,12 @@ import LoadingIcon from './icons/Loading';
 import './style.css';
 
 function fieldRender({
-  children, id, error, validating, label, dataBindProps,
+  children,
+  id,
+  error,
+  validating,
+  label,
+  dataBindProps,
 }) {
   /* eslint-disable */
   if (!React.Children.only(children) && !children) {

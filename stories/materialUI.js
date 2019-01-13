@@ -22,15 +22,16 @@ import { ValidationField, createForm } from '../src';
 
 const rules = {
   name: {
-    validator: name => new Promise((res, rej) => {
-      setTimeout(() => {
-        if (name) {
-          res(name);
-        } else {
-          rej(name);
-        }
-      }, 1000);
-    }),
+    validator: name =>
+      new Promise((res, rej) => {
+        setTimeout(() => {
+          if (name) {
+            res(name);
+          } else {
+            rej(name);
+          }
+        }, 1000);
+      }),
     message: 'Please input your name',
   },
   gender: {
@@ -100,11 +101,11 @@ class MaterialUIForm extends React.PureComponent {
               <FormControlLabel
                 value="female"
                 control={<Radio />}
-                label="Female" />
+                label="Female"/>
               <FormControlLabel
                 value="other"
                 control={<Radio />}
-                label="Other" />
+                label="Other"/>
             </RadioGroup>
           </ValidationField>
           <ValidationField name="birth" label="Date of birth">
@@ -114,7 +115,7 @@ class MaterialUIForm extends React.PureComponent {
             <FormControlLabel
               value="terms"
               control={<Switch value="terms" />}
-              label="I agree to terms" />
+              label="I agree to terms"/>
           </ValidationField>
           <Button
             type="submit"
@@ -123,12 +124,16 @@ class MaterialUIForm extends React.PureComponent {
             disabled={!isValid || isSubmitting || !values.terms || isPristine}>
             Next
           </Button>
-          <Button onClick={initialize} color="primary">
+          <Button
+            onClick={initialize}
+            color="primary"
+            style={{ marginLeft: 10 }}>
             Reset
           </Button>
           <Button
             color="primary"
-            onClick={() => updateFieldValue('gender', 'male', true)}>
+            onClick={() => updateFieldValue('gender', 'male', true)}
+            style={{ marginLeft: 10 }}>
             Set
           </Button>
         </form>
@@ -161,15 +166,15 @@ function fieldRender({
       },
       isInput
         ? {
-          error: error && error.length > 0,
-          endAdornment: validating ? (
-            <InputAdornment position="end">
-              <CircularProgress size={20} />
-              <span />
-            </InputAdornment>
-          ) : null,
-          ...children.props.endAdornment,
-        }
+            error: error && error.length > 0,
+            endAdornment: validating ? (
+              <InputAdornment position="end">
+                <CircularProgress size={20} />
+                <span />
+              </InputAdornment>
+            ) : null,
+            ...children.props.endAdornment,
+          }
         : null,
     ),
   );

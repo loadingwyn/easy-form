@@ -156,7 +156,7 @@ If the form has been decorated by `createForm` then it owns APIs as follows:
 
 | Property        | Type   | Default value | Description                                                                                                                                                                               |
 | :-------------- | :----- | :------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| formatter       | Func   |               | The andler that format the value. <br /> Arguments: <br /> value: `string \| boolean \| number` — The value of input.<br /> Returns `Object` — The formatted value.                       |
+| formatter       | Func   |               | The Handler that format the value. <br /> Arguments: <br /> value: `string \| boolean \| number` — The value of input.<br /> Returns `Object` — The formatted value.                      |
 | name            | string | Required      | The unique identifier of field, corresponding to a value in the form values.                                                                                                              |
 | onValidate      | Func   |               | Callback fired after validation.<br /> Arguments: <br /> result: `Object` — The result of validation. You can pull out the return of the validator by accessing `result.promiseValue`.    |
 | options         | Object |               | Additional options that can be passed to the validator function.                                                                                                                          |

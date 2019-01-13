@@ -44,15 +44,16 @@ const store = createStore(
 /* eslint-enable */
 const rules = {
   name: {
-    validator: name => new Promise((res, rej) => {
-      setTimeout(() => {
-        if (name) {
-          res(name);
-        } else {
-          rej(name);
-        }
-      }, 200);
-    }),
+    validator: name =>
+      new Promise((res, rej) => {
+        setTimeout(() => {
+          if (name) {
+            res(name);
+          } else {
+            rej(name);
+          }
+        }, 200);
+      }),
     message: '用户名不能为空',
   },
   password: {
@@ -101,6 +102,8 @@ class ReduxForm extends React.PureComponent {
             variant="contained"
             color="primary"
             style={{
+              marginTop: 10,
+              width: 80,
               padding: '8px 24px',
             }}
             disabled={!isValid}>
@@ -109,7 +112,8 @@ class ReduxForm extends React.PureComponent {
           <Button
             onClick={() => initialize()}
             style={{
-              marginLeft: '6px',
+              marginTop: 10,
+              marginLeft: 16,
             }}
             color="primary">
             恢复
@@ -141,14 +145,14 @@ function fieldRender({
       },
       isInput
         ? {
-          endAdornment: validating ? (
-            <InputAdornment position="end">
-              <CircularProgress size={20} />
-              <span />
-            </InputAdornment>
-          ) : null,
-          ...children.props.endAdornment,
-        }
+            endAdornment: validating ? (
+              <InputAdornment position="end">
+                <CircularProgress size={20} />
+                <span />
+              </InputAdornment>
+            ) : null,
+            ...children.props.endAdornment,
+          }
         : null,
     ),
   );
@@ -179,13 +183,14 @@ const Demo = connect(
   state => ({
     values: state.formData,
   }),
-  dispatch => bindActionCreators(
-    {
-      update: actionCreator,
-      reset: resetActionCreator,
-    },
-    dispatch,
-  ),
+  dispatch =>
+    bindActionCreators(
+      {
+        update: actionCreator,
+        reset: resetActionCreator,
+      },
+      dispatch,
+    ),
 )(props => <WrappedForm {...props} />); // react-redux does not support rorwarding fefs.
 
 storiesOf('Form with Material-ui', module)

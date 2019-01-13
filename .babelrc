@@ -5,26 +5,25 @@
       {
         "modules": false,
         "targets": {
-          "browsers": [
-            "Chrome >= 37",
-            "ff >= 45",
-            "Safari > 8",
-            "IE >= 10"
-          ]
+          "browsers": ["Chrome >= 37", "ff >= 45", "Safari > 8", "IE >= 10"]
         }
       }
     ],
     "@babel/react"
   ],
   "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "useESModules": true
+      }
+    ],
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-proposal-object-rest-spread"
   ],
   "env": {
     "test": {
-      "plugins": [
-        "@babel/transform-modules-commonjs"
-      ]
+      "plugins": ["@babel/transform-modules-commonjs"]
     }
   }
 }

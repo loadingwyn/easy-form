@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withFormData } from './FormContext';
+import { connect } from './FormContext';
 
 class Field extends Component {
   static propTypes = {
@@ -151,12 +151,7 @@ class Field extends Component {
 
   handleValidate = (e, value) => {
     let result;
-    const {
-      name,
-      validateItem,
-      onValidate,
-      options,
-    } = this.props;
+    const { name, validateItem, onValidate, options } = this.props;
     if (!e) {
       result = validateItem(name, null, this.props);
     } else {
@@ -185,9 +180,10 @@ class Field extends Component {
       [trigger]: this.handleValueChange,
     };
     if (validateTrigger !== 'ignore') {
-      dataBindProps[validateTrigger] = validateTrigger === trigger
-        ? this.handleChangeAndValidate
-        : this.handleValidate;
+      dataBindProps[validateTrigger] =
+        validateTrigger === trigger
+          ? this.handleChangeAndValidate
+          : this.handleValidate;
     }
     let status;
     if (validatings[name]) {
@@ -212,4 +208,4 @@ class Field extends Component {
     });
   }
 }
-export default withFormData(Field);
+export default connect(Field);
