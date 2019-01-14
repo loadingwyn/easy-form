@@ -152,15 +152,15 @@ export default (
       }));
       if (shouldValidate) {
         if (this.fieldValidators[name]) {
-          this.fieldValidators[name](newValue);
+          this.fieldValidators[name].handleValidate(newValue);
         } else {
           this.validateItem(name, newValue);
         }
       }
     };
 
-    register = (name, fieldValidator) => {
-      this.fieldValidators[name] = fieldValidator;
+    register = (name, field) => {
+      this.fieldValidators[name] = field;
     };
 
     unRegister = name => {
@@ -173,13 +173,13 @@ export default (
     };
 
     validateItem = (name, value, ...other) => {
-      const { values } = this.state;
       this.setState(state => ({
         validatings: {
           ...state.validatings,
           [name]: true,
         },
       }));
+      const { values } = this.state;
       const target = Object.assign(
         {},
         values,
@@ -201,7 +201,6 @@ export default (
           }));
         },
         target,
-        values,
         ...other,
       );
       return validation;
@@ -209,9 +208,11 @@ export default (
 
     validateAll = () =>
       Promise.all(
-        Object.keys(this.fieldValidators)
-          .filter(field => this.fieldValidators[field])
-          .map(fieldName => this.fieldValidators[fieldName]()),
+        Object.keys(this.schema).map(fieldName =>
+          this.fieldValidators[fieldName]
+            ? this.fieldValidators[fieldName].handleValidate()
+            : this.validateItem(fieldName),
+        ),
       );
 
     submit = (onSubmitSuccess, onSubmitFail) => () => {

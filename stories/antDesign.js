@@ -13,16 +13,15 @@ const rules = {
       validator: name =>
         new Promise((res, rej) => {
           setTimeout(() => {
-            if (name[0]) {
+            if (name) {
               res(name);
             } else {
               rej(name);
             }
-          }, 1000);
+          }, 1000 * Math.random());
         }),
       message: 'Required',
     },
-    withFields: ['password'],
   },
   password: {
     validator: password => password,
@@ -50,7 +49,7 @@ class AntdForm extends React.PureComponent {
           <ValidationField
             name="name"
             label=""
-            validateTrigger="onBlur"
+            // validateTrigger="onBlur"
             onValidate={action('validate')}>
             <Input placeholder="Username" />
           </ValidationField>
@@ -92,11 +91,11 @@ class AntdForm extends React.PureComponent {
 
 const formItemLayout = {
   labelCol: {
-    xs: { span: 24 },
     sm: { span: 4 },
+    xs: { span: 4 },
   },
   wrapperCol: {
-    xs: { span: 24 },
+    xs: { span: 18, offset: 3 },
     sm: { span: 18, offset: 3 },
   },
 };

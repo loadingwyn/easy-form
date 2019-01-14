@@ -64,7 +64,7 @@ class Field extends Component {
       );
     }
     if (register) {
-      register(name, this.handleValidate);
+      register(name, this);
     }
   }
 
@@ -72,7 +72,7 @@ class Field extends Component {
     const { name, register, unRegister } = this.props;
     if (name !== prevProps.name) {
       unRegister(prevProps.name);
-      register(name, this.handleValidate);
+      register(name, this);
     }
   }
 
@@ -105,7 +105,7 @@ class Field extends Component {
     const { formatter } = this.props;
     const value = this.getValueFromEvent(e, oldValue);
     const formattedValue = formatter ? formatter(value) : value;
-    return typeof formattedValue === 'object'
+    return typeof formattedValue === 'object' && !Array.isArray(formattedValue)
       ? formattedValue
       : { [name]: formattedValue };
   }
@@ -121,13 +121,8 @@ class Field extends Component {
       [validateTrigger]: onTrigger,
     } = this.props;
     const formattedValue = this.format(e, value, name);
+    const result = validateItem(name, formattedValue[name], this, options);
     onFieldChange(formattedValue);
-    const result = validateItem(
-      name,
-      formattedValue[name],
-      options,
-      this.props,
-    );
     if (result) result.then(onValidate, onValidate);
     if (onTrigger) {
       onTrigger(e, value, ...args);
@@ -153,10 +148,10 @@ class Field extends Component {
     let result;
     const { name, validateItem, onValidate, options } = this.props;
     if (!e) {
-      result = validateItem(name, null, this.props);
+      result = validateItem(name, null, this, options);
     } else {
       const formattedValue = this.format(e, value, name);
-      result = validateItem(name, formattedValue[name], options, this.props);
+      result = validateItem(name, formattedValue[name], this, options);
     }
     if (result) result.then(onValidate, onValidate);
     return result;
