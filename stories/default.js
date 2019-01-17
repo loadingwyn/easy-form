@@ -6,23 +6,22 @@ import { ValidationField, createForm } from '../src';
 const rules = {
   name: [
     {
-      validator(name) {
-        return new Promise((res, rej) => {
-          setTimeout(() => {
-            if (name) {
-              res();
-            } else {
-              rej();
-            }
-          }, 500);
-        });
-      },
-      message: '用户名不能为空',
+      validator: name => name,
+      message: 'Required',
     },
   ],
   password: {
-    validator: password => password,
-    message: '密码不能为空',
+    validator: password =>
+      new Promise((res, rej) => {
+        setTimeout(() => {
+          if (password) {
+            res(password);
+          } else {
+            rej(password);
+          }
+        }, 1000 * Math.random());
+      }),
+    message: 'Required',
   },
 };
 

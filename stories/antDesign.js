@@ -10,21 +10,21 @@ const FormItem = Form.Item;
 const rules = {
   name: {
     rules: {
-      validator: name =>
-        new Promise((res, rej) => {
-          setTimeout(() => {
-            if (name) {
-              res(name);
-            } else {
-              rej(name);
-            }
-          }, 1000 * Math.random());
-        }),
+      validator: name => name,
       message: 'Required',
     },
   },
   password: {
-    validator: password => password,
+    validator: password =>
+      new Promise((res, rej) => {
+        setTimeout(() => {
+          if (password) {
+            res(password);
+          } else {
+            rej(password);
+          }
+        }, 1000 * Math.random());
+      }),
     message: 'Required',
   },
 };
@@ -74,6 +74,7 @@ class AntdForm extends React.PureComponent {
               onClick={initialize}
               style={{
                 color: '#1890ff',
+                background: 'transparent',
                 outline: 'none',
                 cursor: 'pointer',
                 padding: 0,
