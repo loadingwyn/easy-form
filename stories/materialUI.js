@@ -192,7 +192,7 @@ function fieldRender({
 }
 const Demo = createForm(
   {
-    birth: '2018-05-28',
+    birth: '2020-01-01',
     terms: false,
   },
   rules,

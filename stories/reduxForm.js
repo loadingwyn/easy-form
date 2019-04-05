@@ -42,22 +42,26 @@ const store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
 );
 /* eslint-enable */
+
 const rules = {
-  name: {
-    validator: name =>
-      new Promise((res, rej) => {
-        setTimeout(() => {
-          if (name) {
-            res(name);
-          } else {
-            rej(name);
-          }
-        }, 200);
-      }),
-    message: '用户名不能为空',
-  },
+  name: [
+    {
+      validator: name => name,
+      message: '用户名不能为空',
+    },
+  ],
   password: {
-    validator: password => password,
+    validator(password) {
+      return new Promise((res, rej) => {
+        setTimeout(() => {
+          if (password) {
+            res();
+          } else {
+            rej();
+          }
+        }, 500);
+      });
+    },
     message: '密码不能为空',
   },
 };
@@ -82,6 +86,7 @@ class ReduxForm extends React.PureComponent {
           <ValidationField
             name="name"
             label="用户名"
+            isInput
             // formatter={value => ({
             //   name: value,
             //   password: value,
@@ -92,6 +97,7 @@ class ReduxForm extends React.PureComponent {
           <ValidationField
             name="password"
             label="密码"
+            isInput
             // trigger="onBlur"
             // valuePropName="defaultValue"
             validateTrigger="onBlur">

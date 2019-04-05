@@ -8,30 +8,31 @@ import { ValidationField, createForm } from '../src';
 const FormItem = Form.Item;
 
 const rules = {
-  name: {
-    rules: {
-      validator: name =>
-        new Promise((res, rej) => {
-          setTimeout(() => {
-            if (name) {
-              res(name);
-            } else {
-              rej(name);
-            }
-          }, 1000 * Math.random());
-        }),
+  name: [
+    {
+      validator: name => name,
       message: 'Required',
     },
-  },
+  ],
   password: {
-    validator: password => password,
+    validator(password) {
+      return new Promise((res, rej) => {
+        setTimeout(() => {
+          if (password) {
+            res();
+          } else {
+            rej();
+          }
+        }, 500);
+      });
+    },
     message: 'Required',
   },
 };
 
 const headerStyle = {
   textAlign: 'center',
-  fontSize: 20,
+  fontSize: 22,
 };
 class AntdForm extends React.PureComponent {
   handleSubmit = e => {
@@ -45,7 +46,7 @@ class AntdForm extends React.PureComponent {
     return (
       <Card style={{ width: 400, margin: 40 }}>
         <form onSubmit={this.handleSubmit}>
-          <h1 style={headerStyle}>Log in</h1>
+          <h1 style={headerStyle}>Easy Form</h1>
           <ValidationField
             name="name"
             label=""

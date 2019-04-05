@@ -1,5 +1,6 @@
-import { configure, addDecorator } from '@storybook/react';
+import { addDecorator, configure} from '@storybook/react';
 import { withConsole } from '@storybook/addon-console';
+
 
 function loadStories() {
   require('../stories/materialUI');
