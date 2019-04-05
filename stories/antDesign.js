@@ -75,6 +75,7 @@ class AntdForm extends React.PureComponent {
               onClick={initialize}
               style={{
                 color: '#1890ff',
+                background: 'transparent',
                 outline: 'none',
                 cursor: 'pointer',
                 padding: 0,
